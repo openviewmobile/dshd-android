@@ -1,0 +1,22 @@
+# Android release end-to-end (2026-11-09)
+
+Installed dist/android/dshd-android-release-e2e.apk (test key + local rootfs URL).
+The debug app was uninstalled first; release install and launch succeeded.
+
+Flow:
+  1. fresh release: dsh runtime is not installed
+  2. DOWNLOAD ROOTFS from http://127.0.0.1:18082 (adb reverse)
+  3. 573.2 MB downloaded, SHA-256 6480e2ad... verified, archive imported
+  4. provider form: base URL http://192.0.2.10:3000/v1, model deepseek-v4.1-flash
+  5. Host ready; WebView loaded; real completion: "Hello from release 👋"
+
+APK SHA-256: 59d4b231b74ff50c5c268df4f48ea6f28964b3e965fd9d60a3da42da711852b1
+Screenshot: android-release-e2e.png
+
+Caveat: test signing key and local test URL are baked into this APK; production
+must rebuild with the release owner key and the hosted rootfs URL/SHA.
+
+## Round 20 recheck
+Same release install (test key + local URL): sent "Say round twentys";
+assistant replied "Round twenty 🎯" in 8s; 2-round conversation, 17.8K tok.
+Screenshot: android-release-round20.png

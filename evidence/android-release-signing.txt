@@ -1,0 +1,13 @@
+# Android release signing (2026-11-09)
+
+Gradle release signing is env-driven: DSHD_KEYSTORE, DSHD_KEYSTORE_PASSWORD,
+DSHD_KEY_ALIAS, DSHD_KEY_PASSWORD. No key is stored in the repository.
+
+Test build: /tmp/dshd-test.jks (throwaway, not committed)
+APK: dist/android/dshd-android-release.apk
+SHA-256: dab80835ba9e74afc589677b0f76fcd0edfa691dbe00b35f5a9552f2bc5978ef
+apksigner verify: Verified, v2 scheme, 1 signer
+
+Not tested: install over the debug-signed app (Android rejects a different signing
+certificate; uninstalling would delete the 1.7 GB app-private rootfs). Production
+release must use the release owner key, not this test key.

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1080, initial-scale=1" />
+<title>DSHD first-use demo</title>
+<link rel="stylesheet" href="./scene.css" />
+<script type="importmap">
+{ "imports": { "three": "/node_modules/three/build/three.module.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="gl"></canvas>
+  <div class="ambient" id="ambient"></div>
+
+  <div class="hud">
+    <div class="hud-brand">
+      <span class="hud-mark" id="hudMark"></span>
+      <span class="hud-word">DSHD</span>
+    </div>
+    <div class="hud-right">
+      <span class="hud-note" id="hudNote"></span>
+      <span class="hud-step" id="hudStep">01 / 06</span>
+    </div>
+  </div>
+
+  <div class="hero" id="hero"></div>
+
+  <div class="stage">
+    <div class="phone-wrap" id="phoneWrap">
+      <div class="phone-aura"></div>
+      <div class="phone">
+        <div class="phone-rim"></div>
+        <div class="phone-side left-a"></div>
+        <div class="phone-side left-b"></div>
+        <div class="phone-side right-a"></div>
+        <div class="screen" id="screen">
+          <div class="screens" id="screens"></div>
+          <div class="island"><span class="cam"></span></div>
+          <div class="screen-gloss"></div>
+        </div>
+      </div>
+      <div class="phone-shadow"></div>
+    </div>
+  </div>
+
+  <div class="caption-wrap">
+    <div class="caption" id="caption"><span class="cap-text" id="capText"></span></div>
+  </div>
+
+  <div class="progress" id="progress"></div>
+  <div class="edge-label left" id="edgeLeft"></div>
+  <div class="edge-label right" id="edgeRight"></div>
+  <div class="flash" id="flash"></div>
+  <div class="grain"></div>
+  <div class="vignette"></div>
+</div>
+<script type="module" src="./scene.js"></script>
+</body>
+</html>

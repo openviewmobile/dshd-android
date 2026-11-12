@@ -1,0 +1,13 @@
+{
+  "name": "dshd-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs",
+    "audio": "python3 build_audio.py"
+  },
+  "dependencies": {
+    "playwright-core": "1.65.0",
+    "three": "0.187.0"
+  }
+}

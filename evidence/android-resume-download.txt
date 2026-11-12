@@ -1,0 +1,14 @@
+# Android resumable rootfs download (2026-11-09)
+
+Test: 2 MiB file served over HTTP Range, interrupted at 983040 bytes, then resumed.
+
+First run:
+  cache/test.bin.part = 983040 bytes
+Resume run:
+  debug-download: Downloading rootfs… 0.9 / 2.0 MB (resumed)
+  debug-download: Download complete (9cf11084814b232b8931077db1a97e9aba9b976a10b3606a64b756468df0d776)
+Final:
+  2097152 bytes; SHA-256 matches expected
+
+Implementation: HTTP Range + .part file + SHA-256 verification; 416 full-part path
+verifies and renames; 200 fallback restarts from zero.

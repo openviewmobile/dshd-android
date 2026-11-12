@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, initial-scale=1">
+  <title>DSHD YouTube promo</title>
+  <link rel="stylesheet" href="./scene.css">
+</head>
+<body>
+  <main id="stage">
+    <div class="bg"></div>
+    <div class="grid"></div>
+    <div class="vignette"></div>
+
+    <header class="brand">
+      <div class="mark"><img src="./logo.svg" alt=""></div>
+      <div>
+        <div class="wordmark">DSHD</div>
+        <div class="brandSub">DEEPSEEK HARNESS DESKTOP</div>
+      </div>
+      <div class="edition">ANDROID</div>
+    </header>
+
+    <section id="slides"></section>
+
+    <div class="step"><span id="stepNum">01</span><span class="slash" id="stepSlash">/ 06</span></div>
+
+    <div class="features">
+      <span>LOCAL RUNTIME</span><i></i>
+      <span>BRING YOUR OWN MODEL</span><i></i>
+      <span>APACHE-2.0</span>
+    </div>
+
+    <div class="cta" id="outroCta"><span class="ctaDot"></span><span id="ctaText">GITHUB · LINK IN DESCRIPTION</span></div>
+    <div id="caption"></div>
+    <div class="progress"><span id="progressFill"></span></div>
+
+    <div class="phone" id="phone">
+      <div class="phoneShell">
+        <div class="phoneScreen">
+          <video id="screenVideo" muted playsinline preload="auto"></video>
+          <div class="screenGloss"></div>
+        </div>
+      </div>
+      <div class="phoneLabel" id="phoneLabel">PRODUCT DEMO · FIRST RUN</div>
+    </div>
+
+    <div class="cornerTL"></div><div class="cornerBR"></div>
+  </main>
+  <script src="./scene.js"></script>
+</body>
+</html>

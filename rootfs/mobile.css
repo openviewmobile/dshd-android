@@ -1,0 +1,178 @@
+/* Android WebView 92 mobile layout fixes.
+ * The dsh web UI is desktop-first: the settings panel uses fixed nav widths and
+ * container queries, and Chromium 92 supports neither container queries nor the
+ * narrow default. Force a readable one-column mobile layout under 600 CSS px. */
+@media (max-width: 600px) {
+  div[class*="overlay"] > div[class*="panel"] {
+    width: calc(100vw - 8px) !important;
+    max-width: calc(100vw - 8px) !important;
+    grid-template-columns: 132px minmax(0, 1fr) !important;
+    max-height: calc(100vh - 16px) !important;
+  }
+  div[class*="panel"] [class*="navCell"] {
+    width: auto !important;
+    min-width: 0 !important;
+    gap: 6px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+  div[class*="panel"] [class*="navLabel"] {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    font-size: 12px !important;
+    line-height: 16px !important;
+  }
+  div[class*="panel"] div[class*="options"] {
+    min-width: 0 !important;
+    padding: 0 12px !important;
+  }
+  div[class*="panel"] div[class*="row"] {
+    flex-wrap: wrap !important;
+    row-gap: 8px !important;
+  }
+  div[class*="panel"] div[class*="rowText"] {
+    flex: 1 0 100% !important;
+    padding-right: 0 !important;
+    min-width: 0 !important;
+  }
+  ul[class*="cards"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  div[class*="titleRow"] > button[class*="cardTitle"] {
+    flex: 1 1 auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+  }
+  div[class*="pageBody"] li[class*="card"] {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  div[class*="panel"] [class*="navIcon"] {
+    display: none !important;
+  }
+  div[class*="panel"] div[class*="options"] {
+    overflow-x: hidden !important;
+    min-width: 0 !important;
+  }
+  div[class*="panel"] div[class*="groupTitleRow"] {
+    flex-wrap: wrap !important;
+    row-gap: 6px !important;
+  }
+  div[class*="panel"] div[class*="headerEnd"] {
+    max-width: 100% !important;
+    margin-left: 0 !important;
+  }
+  div[class*="panel"] div[class*="switcher"] {
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+  div[class*="panel"] div[class*="switcherLabel"] {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  div[class*="panel"] [class*="cardHead"] {
+    flex-wrap: wrap !important;
+    row-gap: 4px !important;
+  }
+  div[class*="panel"] [class*="cardHead"] > [class*="cardId"] {
+    flex: 0 0 100% !important;
+    margin-left: 0 !important;
+  }
+  div[class*="panel"] [class*="cardIdentity"] {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+  div[class*="panel"] [class*="cardName"] {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+}
+
+/* Desktop-only: the settings header's "open configuration file" action hands
+ * the document to a desktop opener. Android has no such handler, so keep the
+ * dead control out of the phone UI (the config is still editable over ADB). */
+@media (max-width: 600px) {
+  div[class*="me01iq_action"] {
+    display: none !important;
+  }
+}
+
+/* Extra-small phones (320-380 CSS px): reduce the settings navigation column
+ * and let model/provider action rows shrink instead of being clipped. */
+@media (max-width: 380px) {
+  div[class*="overlay"] > div[class*="panel"] {
+    grid-template-columns: 104px minmax(0, 1fr) !important;
+  }
+  div[class*="panel"] div[class*="options"] {
+    padding: 0 8px !important;
+  }
+  div[class*="panel"] [class*="navLabel"] {
+    font-size: 11px !important;
+    line-height: 15px !important;
+  }
+  div[class*="panel"] [class*="_addBlock"],
+  div[class*="panel"] [class*="_addActions"],
+  div[class*="panel"] [class*="_addAction"] {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  div[class*="panel"] [class*="_addActions"] button {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+  }
+  div[class*="panel"] div[class*="_cards"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  div[class*="panel"] div[class*="_cards"] > div {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Narrow screens: the document preview puts the full path in a single
+ * right-aligned line, hiding the beginning of the path. Wrap it instead. */
+@media (max-width: 600px) {
+  [class*="dhJKeW_path"],
+  [class*="dhJKeW_header"] [class*="path"],
+  [data-textpreview-path] {
+    direction: ltr !important;
+    display: block !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+  [class*="dhJKeW_header"] {
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+}
+
+
+/* Extra-small phones: use a short, fully visible placeholder. The full hint
+ * remains available at >=341px; the pseudo-element is only a visual stand-in. */
+@media (max-width: 340px) {
+  .uV2eYG_placeholder {
+    max-width: 100% !important;
+    font-size: 0 !important;
+    line-height: 18px !important;
+    white-space: nowrap !important;
+  }
+  .uV2eYG_placeholder::after {
+    content: "Ask or run a task";
+    font-size: 12px;
+  }
+  html[lang^="zh"] .uV2eYG_placeholder::after {
+    content: "输入消息或运行任务";
+  }
+}

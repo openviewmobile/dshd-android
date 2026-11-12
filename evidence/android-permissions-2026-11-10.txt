@@ -1,0 +1,113 @@
+Android permissions / bridge verification (2026-11-10)
+Device: LGE-AN10, Android 12, arm64, rooted adb
+
+== Build
+:app:assembleDebug / assembleRelease OK
+APK installed over 0.2.0; launch via MAIN/LAUNCHER.
+Android 12 crash found and fixed: starting Host with startService() from
+onCreate/onResume threw BackgroundServiceStartNotAllowedException. Now
+startForegroundService() is used and onCreate only paints UI.
+
+== Native bridge
+Bridge file: rootfs/home/.dsh/android-bridge.json (0600)
+GET /v1/health
+{"ok":true,"service":"dshd-android-bridge","version":"1"}
+
+GET /v1/permissions (after grants)
+microphone=false camera=true location=true notifications=true
+bluetooth=true phone=true contacts=true
+
+GET /v1/location (while fresh network fix available)
+{"ok":true,"latitude":30.234052,"longitude":120.026504,
+ "accuracyMeters":40,"provider":"network","timestamp":1794291586844}
+
+GET /v1/location (locked/dozing, no fresh fix)
+{"ok":false,"code":"location_timeout","message":"No location fix within 18 seconds."}
+Stale-cache path exists but had no prior cached fix in this fresh state.
+
+GET /v1/bluetooth
+{"ok":true,"available":true,"enabled":true,"name":"Magic4 Pro",
+ "bonded":[],"scanReady":true}
+
+POST /v1/bluetooth/scan {"seconds":4}
+{"ok":true,"devices":[
+  {"name":"","address":"7E:A0:A0:F1:E6:34","rssi":-41},
+  {"name":"Mijia Scale S800 BB09","address":"04:AE:47:8F:BB:09","rssi":-66}
+],"seconds":4}
+Final run found nearby BLE advertisements (including Mijia Scale S800 BB09).
+Earlier empty result was a real empty environment, not a fake success.
+Earlier failure with only legacy BLUETOOTH:
+java.lang.SecurityException: Need android.permission.BLUETOOTH_SCAN permission ...
+Fixed by requiring BLUETOOTH_SCAN/CONNECT on API 31+; verified pm grant.
+
+POST /v1/phone/call {"number":"10086"}
+{"ok":true,"number":"10086","action":"call"}
+dumpsys activity: mResumedActivity=com.android.incallui/.InCallActivity
+SIM state ABSENT,ABSENT: call setup cannot complete on this test device.
+
+POST /v1/phone/call {"number":"not-a-number"}
+{"ok":false,"code":"invalid_number",...}
+
+GET /v1/contacts?query=a&limit=2
+{"ok":true,"contacts":[]}   (test device has no contacts)
+
+POST /v1/notify
+{"ok":true,"notified":true}
+dumpsys notification contains android.title=DSHD 权限测试.
+
+POST /v1/permissions/request {"name":"camera"}
+{"ok":true,"opened":true,...}   (activity launch accepted)
+
+== WebView capabilities
+getUserMedia({audio:true}) -> ok, one audio track
+getUserMedia({video:true}) -> ok, "camera2 1, facing front"
+navigator.geolocation.getCurrentPosition -> lat 30.234052, lon 120.026504, acc 40
+
+== Agent tools
+dsh plugin @deepseek-ai/dsh-android-bridge is inserted by --patch.
+Prompt: 调用 android_permissions 工具...
+Result: microphone false, camera false, location false, notifications true,
+bluetooth true, phone false, contacts false.
+
+Prompt: 调用 android_location 工具...
+Tool card android_location · {} executed; result location_timeout while device
+locked/dozing (expected failure path).
+
+== Regression
+scripts/android-e2e.sh:
+PASS webview shell and composer
+PASS agent round trip — E2E-OK
+PASS attachment upload route — HTTP 200
+PASS file chooser input present
+4/4 checks passed
+
+
+== UI
+Permission center at 320 CSS px and 375 CSS px: title/buttons fit, list scrolls to
+Contacts and Open Android app settings; screenshots:
+  evidence/ui-permissions-320.png
+  evidence/ui-permissions-375.png
+
+== High-risk second confirmation (2026-11-10)
+Revoked READ_CONTACTS, opened Permissions > Contacts:
+  first dialog: "Confirm sensitive permission"
+  message: agent can read names/numbers, read-only, whole address book
+  Cancel -> no Android runtime dialog; READ_CONTACTS remained denied
+  Continue -> Android contacts dialog -> 始终允许 -> permission center refreshed
+             to "Contacts (read) ✓ Granted"
+Revoked CALL_PHONE and invoked bridge POST /v1/permissions/request {"name":"phone"}:
+  bridge returned {"ok":true,"opened":true}
+  UI showed "Confirm sensitive permission" for direct calls
+  Continue -> Android phone dialog -> 始终允许 -> CALL_PHONE granted
+Screenshot: evidence/ui-permissions-confirm-375.png
+
+== Permission audit
+Manifest and code checked against implemented features: no missing runtime permission
+for mic, camera, foreground location, notifications, Bluetooth scan, direct call,
+contacts read, Internet or foreground service.
+Deliberately not added: VIBRATE, WAKE_LOCK, ACCESS_NETWORK_STATE,
+READ_EXTERNAL_STORAGE/READ_MEDIA_*, Wi-Fi/NFC/BLUETOOTH_ADVERTISE, sensors,
+calendar, SMS/call log/phone state/answer calls.
+Added BLUETOOTH_SCAN android:usesPermissionFlags="neverForLocation"; BLE scan
+still returned Mijia Scale S800 BB09 after reinstall.
+Android <=30 Bluetooth permission now also requires location, matching scanReady.

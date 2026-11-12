@@ -1,0 +1,9 @@
+PASS: APK exists: <workspace>/android/dshd-android-release.apk
+PASS: APK v2/v3 signature verifies
+FAIL: no loopback rootfs URL in classes.dex
+FAIL: DSHD_KEYSTORE points to a file
+FAIL: keystore missing or looks like a test key ()
+FAIL: DSHD_ROOTFS_URL is set
+FAIL: ROOTFS SHA-256 is 64 hex chars
+
+Release is NOT ready.

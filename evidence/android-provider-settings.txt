@@ -1,0 +1,12 @@
+# Android provider settings (2026-11-09)
+
+Release APK: dist/android/dshd-android-release-settings.apk
+SHA-256: 0048ec5ae6c0855451aac78053c37b6255f45490fa214498f84b3e91315d612f
+
+Installed over the existing release app (same test key); app data/rootfs preserved.
+Native "Provider settings" bar opens the form in edit mode.
+Changed base URL, left API key blank, saved.
+Keystore key was kept (no re-entry); Host restarted; real reply "Key kept."
+Screenshot: android-provider-settings.png
+
+Caveat: test signing key and test rootfs URL still baked in.

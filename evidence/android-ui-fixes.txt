@@ -1,0 +1,189 @@
+# Android 界面/插件问题分析与修复（2026-11-09）
+
+## 已修复
+
+1. Chromium 92 缺 URL.canParse / URL.parse
+   - 现象：进入插件详情白屏，logcat `TypeError: URL.canParse is not a function`。
+   - 修复：dsh-index.html（APK 资源 + rootfs frontend）增加 polyfill。
+   - 文件：app/app/src/main/assets/dsh-index.html
+           scripts/patch-rootfs-webview.sh
+
+2. rootfs 内 AppleDouble `._*.json`
+   - 现象：`Plugin metadata ... locale/._de.json must use a language id`。
+   - 根因：macOS 文件带 com.apple.provenance，BSD tar 存入 xattr，Android tar 解出 `._name`。
+   - 修复：host 侧用 `COPYFILE_DISABLE=1 tar --no-xattrs` 重新打包；rootfs 内清理 `._*`。
+   - 文件：scripts/pack-rootfs.sh
+
+3. 插件安装 spawn pnpm ENOENT
+   - 根因：Host PATH 不含 /opt/node24/bin，rootfs 也没有 pnpm。
+   - 修复：rootfs 内置 pnpm 10.34.9 + /opt/node24/bin/pnpm wrapper；Host PATH 前移。
+   - 文件：HostKeepAliveService.java
+   - 验证：pnpm 输出 `+ dsh-plugin-whale-pet ^0.2.9`。
+
+## 已修复：root Include live reload
+
+插件安装/启用/停用后报：
+`dsh: profile reload requires the root Include entry`
+
+根因：`mountRootInclude()` 用 `ctx.get("loader")` 取 loader；Android web profile
+上该服务查询可能为 undefined，而 `ctx.loader` 已是活的 loader，函数于是提前
+return，root Include 没有写入 `bootstrapIncludes`。之后 HMR 的
+`recompose()` 必然找不到 entry。
+
+修复：
+- `const loader = ctx.get("loader") ?? ctx.loader;`
+- reload 时 `bootstrapIncludes.get(ctx) ?? loader entries 中的 include`。
+
+复现：`scripts/patch-rootfs-appboot.sh`。
+验证：启用智能体团队后 3 个组件立即运行中；停用后立即已关闭；第三方
+小鲸鱼安装、立即启用、卸载均无需重启（截图 ui-29 ~ ui-36）。
+
+## 产物
+
+- APK: dist/android/dshd-android-release-project-lan-fixed4.apk
+  SHA-256 f29fc338da2e97eb12b1924eb061bc55756bfb223a2396e13add0d676372f483
+- rootfs: dist/android/dshd-rootfs-arm64-webview-pnpm-appboot.tar.gz
+  SHA-256 cce786f01a6c75f594171f3a2c979d3edb95583465413eb4c3a4eab2fa33be9c
+
+## 2026-11-09 第二轮：Settings 移动端布局
+
+现象：
+- 通用设置正文列仅约 139px，标签一字一行（权/限、语/言）；
+- 内置插件卡片两列约 90px，标题只剩“智…”“工…”，英文 Built-in plugi… 截断。
+
+根因：
+- Settings panel 固定 `188px 139px` 网格；`oY77xG_rowText` 自带 `padding-right:48px`，
+  375px CSS 视口下正文只剩 8px；
+- 插件卡使用 CSS container query `@container (width<=520px)`，Android WebView 92
+  不支持 container query，永远走 2 列。
+
+修复：
+- `rootfs/mobile.css`：600px 以下强制 panel 宽
+  `calc(100vw-8px)`、导航 164px、行换行、正文 `padding-right:0`、`ul[class*="cards"]`
+  单列；导航标签允许换行。
+- `scripts/patch-rootfs-mobile-css.sh` 幂等注入 rootfs `dsh-web-frontend/dist/index.html`；
+  APK assets `dsh-index.html` 同步内联同一段 CSS。
+- 验证：fixed5 全新安装 + 下载 rootfs 后 Settings 通用/内置插件/模型页均正常；
+  英文导航完整（ui-73、ui-47、ui-51）。
+
+注意：CSS 使用属性子串选择器，仅在 Android WebView 92 / 375px 验证，后续升级 WebView
+或桌面 Web 时需回归。
+
+## 2026-11-09 第二轮：Android Agent 工具默认不可用
+
+现象：
+- 新会话默认“工作区内修改”，执行 shell 报
+  `Error: sandbox mode "workspace-write" ...`；glob 报 `rg ...` 失败。
+
+根因：
+1. Android 无可用 Linux sandbox 后端（bwrap/landlock 不可用），workspace-write
+   必然失败；
+2. rootfs PATH 没有 rg，`@vscode/ripgrep-linux-arm64` 的二进制未被发现；
+3. 权限默认值来自 base composition 的 `permission` 配置，仅改 Settings 的
+   `settings.yaml` 不生效（新会话仍 workspace-write）。
+
+修复：
+- ProviderConfig 在 profile patch 覆盖 `permission`：
+  `defaultPreset: danger-full-access`，并保留只读/工作区/完全权限三档；
+- HostKeepAliveService 设置 `DSH_PERMISSION_MODE=danger-full-access`，保持审批策略一致；
+- rootfs `/opt/node24/bin/rg` 软链到 packaged ripgrep。
+- 验证：fixed6 保存 Provider 后新建会话直接“完全权限”；真实任务可执行
+  `pwd/ls`、写文件、读取、相对 glob、diff（ui-61、ui-75）。
+
+绝对路径 glob 修复（fixed8）：
+- 现象：`glob(path="/home/...")` 报 `rg ... No such file or directory`。
+- 根因：dsh Host 不在 chroot 内，rg 子进程按 Android 根解析 `/home`；而
+  `existsSync("/home/...")` 被 Cortex 的 LD_PRELOAD hook 映射为 true，不能靠
+  “路径是否存在”判断。
+- 修复：在 `dsh-tool-fs-search` 的 `runRipgrep` 里，把 `/home`、`/tmp` 和
+  实际不存在的绝对路径参数映射到 `CORTEX_ROOT` 下；脚本
+  `scripts/patch-rootfs-fs-search-paths.sh` 幂等应用。
+- 验证：fixed8 上绝对路径 glob 返回 hello.txt；输出仍是物理路径
+  `/data/user/0/.../rootfs/home/...`，属显示层小问题，不影响读取。
+
+## 2026-11-09 第二轮：Agent Teams 真实任务
+
+- 通过 agent 修改 `home/.dsh/profiles/web/package.json` 的 bundles，实时加入
+  `@deepseek-ai/dsh-experimental-agent-team-profile`，无需重启；
+- 头部出现“智能体团队”，工具注册新增 6 个；
+- 真实任务：lead 派生 alpha-writer / beta-writer，两队友分别写
+  `team-alpha.md`、`team-beta.md`，lead 等待并汇总；面板显示 3 名成员，
+  两队友 `inactive (finished)`（ui-76 ~ ui-78）。
+- 共享任务板为空（本次任务未创建 task），不是加载失败。
+
+注意：全新安装后的**第一个空白会话**仍以 workspace-write 初始化，之后新建会话
+按 composition 的 danger-full-access。首个会话手动切完全权限后可正常使用。
+
+## 产物（fixed6）
+
+- APK: dist/android/dshd-android-release-project-lan-fixed6.apk
+  SHA-256 c324c67e3c2a6a072fa815b0c53bd31665a8a9207b1dcac41f263d08b6d52e42
+- rootfs: dist/android/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed6.tar.gz
+  SHA-256 07bd578ac6bac92e62f8caf633fbee9180be1babe0ab1e485ac8f8ad37ef50c8
+  （fixed6 APK 内置下载 URL 为 .../dsh-rootfs-fixed6.tar.gz，部署时需保持同名）
+
+
+## 产物（fixed7/fixed8）
+
+- fixed7 APK: dist/android/dshd-android-release-project-lan-fixed7.apk
+  SHA-256 42d6bbcbcc966b94c718eb25ac5ab5a25487923c3fba1673ee2e3d60b0fbf50c
+- fixed8 APK: dist/android/dshd-android-release-project-lan-fixed8.apk
+  SHA-256 26d20fe065cf82b5b789c9a878eded752504b1161d9ecd4d21935ac04b21a507
+- fixed8 rootfs: dist/android/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed8.tar.gz
+  SHA-256 e8b9126a39d6f7a27d6a2680961d617f51acdf896bc5ffa411ed1570ed69925b
+  （fixed8 APK 内置 URL 为 .../dsh-rootfs-fixed8.tar.gz）
+
+
+## 2026-11-09 fixed8：绝对 glob 与工作区生命周期
+
+- 绝对路径 glob 修复见上；fixed8 真机确认 `glob(path="/home/...")` 成功。
+- 工作区生命周期真机验证：
+  - 内置目录选择器（非 SAF）可选择主目录、新建文件夹、显示隐藏文件再打开；
+  - 新建 `QAWork` 后作为第二工作区打开，头部显示 QAWork；
+  - 工作区菜单可重命名为 Default（ASCII；中文 `adb input text` 会 NPE，非产品问题）；
+  - 删除工作区有确认框，删除后列表恢复。
+- 会话置顶/取消置顶验证（ui-84）。
+- 已知小问题：删除某工作区时若空白草稿仍指向它，界面可能停在“选择工作区”且下拉不易恢复；
+  重启 App 后恢复。未做代码修复。
+
+## 2026-11-09 fixed8：Agent Teams 任务板
+
+- 真机加入 team bundle 后，创建共享 task-1，派生 file-writer，等待完成；
+- 面板显示 2 名成员、task-1 已完成、owner/file-scope；文件 648B（ui-85、ui-86）。
+- 说明：bundle 包位于 dsh 安装目录的嵌套 node_modules，agent 曾误判“未安装”，
+  但工具与 UI 实际均已激活。
+
+## 2026-11-09 fixed10：横屏键盘把会话顶出视口
+
+现象：竖屏键盘正常；横屏弹出键盘后会话正文/输入框全部消失，只剩头部和底栏
+（ui-88）。仅加 `windowSoftInputMode=adjustResize` 无效（ui-89）。
+
+根因：Activity 在 `configChanges` 中声明了 `orientation|screenSize`，旋转时 WebView
+不重建，仍按竖屏高度布局；横屏可用高度被键盘压缩后，页面底部（输入框）落在
+WebView 可视区之外，滚动也到不了。
+
+修复：从 `configChanges` 移除 `orientation|screenSize`（保留 keyboard/uiMode），
+让旋转重建 Activity/WebView；同时保留 `adjustResize`。
+验证：fixed10 横屏正文、输入框、发送按钮完整可见（ui-90、ui-91）。
+
+副作用：旋转会重建 Activity，会话状态由 Host/本地存储恢复；已实测不丢会话。
+
+
+## 2026-11-09 fixed10：实验性插件逐个启用
+
+插件页“实验性插件”区共 5 项，逐个操作结果：
+- 智能体团队：已启用；fixed8 真实任务 task-1 完成（ui-85、ui-86）。
+- 语音输入：开关可启用，4 个组件全部“运行中”；未下载 SenseVoice 模型、未录音，
+  因此只验证到组件层（ui-92、ui-93）。
+- 自定义插件索引：启用后插件页出现“发现”标签，可浏览索引（ui-94）。
+- 自动授权审查：启用成功，描述为提供“自动审查”访问模式（ui-95）；未跑完整审批流。
+- 变更请求与工作树：依赖本机 `gh` 登录，未启用/未验收。
+
+- 会话归档：当前会话归档后立即从列表移除，toast 提示可筛选已归档会话（ui-96）。
+
+## 最终产物（fixed10）
+
+- APK: dist/android/dshd-android-release-project-lan-fixed10.apk
+  SHA-256 5347ef60b94a882aa1579e622002e0e539cae78041bf13b2dcad36cf0da0058e
+- rootfs: dist/android/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed8.tar.gz
+  SHA-256 e8b9126a39d6f7a27d6a2680961d617f51acdf896bc5ffa411ed1570ed69925b

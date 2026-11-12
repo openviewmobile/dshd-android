@@ -1,0 +1,18 @@
+# Android project release key + clean APK (2026-11-09)
+
+Generated a project-local release key OUTSIDE the repo:
+  ~/.dshd/android-release.jks (RSA 4096, alias dshd-release)
+  ~/.dshd/android-release.password (chmod 600)
+Back up both; losing them breaks update continuity.
+
+Clean release built with empty DSHD_ROOTFS_URL/SHA (manual SAF import path):
+  dist/android/dshd-android-release-project.apk
+  SHA-256: 14a76e8fe0c4100723bfbba1181bd5ee7af3852dad827e486c50cbcc07240107
+  apksigner: v2/v3 verified
+
+Readiness gate with the project key:
+  PASS signature, no loopback rootfs URL, keystore not test key
+  FAIL DSHD_ROOTFS_URL / SHA-256 (hosted rootfs still missing)
+
+Not installed: it has a different signer from the currently installed test-key
+release app, so installing would require uninstall and lose the app-private rootfs.

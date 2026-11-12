@@ -1,0 +1,112 @@
+plugins { id 'com.android.application' }
+
+def embeddedSetting = System.getenv('DSHD_EMBED_ROOTFS')
+def defaultRootfs = new File(rootProject.projectDir.parentFile,
+    'dist/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf.tar.xz')
+def embedRootfs = true
+def embeddedRootfs = defaultRootfs
+if (embeddedSetting != null) {
+  if (embeddedSetting in ['none', '0', 'false']) {
+    embedRootfs = false
+  } else if (!embeddedSetting.trim().isEmpty()) {
+    embeddedRootfs = new File(embeddedSetting)
+  }
+}
+def sha256 = { File file ->
+  def digest = java.security.MessageDigest.getInstance('SHA-256')
+  file.withInputStream { input ->
+    byte[] buffer = new byte[1 << 16]
+    int read
+    while ((read = input.read(buffer)) > 0) digest.update(buffer, 0, read)
+  }
+  return digest.digest().collect { String.format('%02x', it & 0xff) }.join()
+}
+def embeddedVersion = ''
+if (embedRootfs) {
+  if (!embeddedRootfs.isFile()) {
+    throw new GradleException("embedded rootfs missing: ${embeddedRootfs}; set DSHD_EMBED_ROOTFS=/path/to/rootfs.tar.xz or DSHD_EMBED_ROOTFS=none for a small debug APK")
+  }
+  embeddedVersion = sha256(embeddedRootfs)
+}
+def generatedRootfsAssets = layout.buildDirectory.dir('generated/embeddedRootfs')
+
+android {
+  namespace 'com.dshd.android'
+  compileSdk 35
+
+  defaultConfig {
+    applicationId 'com.dshd.android'
+    minSdk 28
+    targetSdk 28
+    versionCode 5
+    versionName '0.3.2'
+    buildConfigField 'String', 'ROOTFS_URL',
+        '"' + (System.getenv('DSHD_ROOTFS_URL') ?: '') + '"'
+    buildConfigField 'String', 'ROOTFS_SHA256',
+        '"' + (System.getenv('DSHD_ROOTFS_SHA256') ?: '') + '"'
+    buildConfigField 'boolean', 'ROOTFS_EMBEDDED', embedRootfs ? 'true' : 'false'
+    buildConfigField 'String', 'ROOTFS_VERSION', '"' + embeddedVersion + '"'
+  }
+
+  signingConfigs {
+    if (System.getenv('DSHD_KEYSTORE')) {
+      release {
+        storeFile file(System.getenv('DSHD_KEYSTORE'))
+        storePassword System.getenv('DSHD_KEYSTORE_PASSWORD')
+        keyAlias System.getenv('DSHD_KEY_ALIAS')
+        keyPassword System.getenv('DSHD_KEY_PASSWORD')
+        enableV1Signing false
+        enableV2Signing true
+        enableV3Signing true
+      }
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      if (System.getenv('DSHD_KEYSTORE')) signingConfig signingConfigs.release
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+
+  buildFeatures { buildConfig true }
+
+  androidResources {
+    noCompress 'xz'
+  }
+
+  sourceSets {
+    main {
+      if (embedRootfs) assets.srcDir(generatedRootfsAssets)
+    }
+  }
+
+  dependencies {
+    // Pure-Java XZ decoder for the one-time rootfs import (no NDK dependency).
+    implementation 'org.tukaani:xz:1.10'
+  }
+
+  packaging {
+    jniLibs { useLegacyPackaging true }
+  }
+
+  // targetSdk 28 is intentional: Cortex runs the glibc rootfs without Android's
+  // newer seccomp/W^X restrictions. Do not fail release builds on Play's SDK warning.
+  lint {
+    disable 'ExpiredTargetSdkVersion'
+  }
+}
+
+if (embedRootfs) {
+  tasks.register('copyEmbeddedRootfs', Copy) {
+    from(embeddedRootfs)
+    into(generatedRootfsAssets)
+    rename { 'rootfs.tar.xz' }
+  }
+  tasks.named('preBuild').configure { dependsOn 'copyEmbeddedRootfs' }
+}

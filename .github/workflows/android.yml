@@ -1,0 +1,65 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-apk:
+    name: Build lite APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept SDK licenses and install compile SDK
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build lite APK from source
+        env:
+          DSHD_EMBED_ROOTFS: none
+        run: |
+          chmod +x app/gradlew
+          cd app
+          ./gradlew --no-daemon :app:assembleDebug
+
+      - name: Generate checksums
+        run: |
+          cd app/app/build/outputs/apk/debug
+          sha256sum app-debug.apk > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dshd-android-debug-${{ github.sha }}
+          path: |
+            app/app/build/outputs/apk/debug/app-debug.apk
+            app/app/build/outputs/apk/debug/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14

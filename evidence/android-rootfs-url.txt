@@ -1,0 +1,13 @@
+# Android rootfs URL BuildConfig injection (2026-11-09)
+
+Built release with:
+  DSHD_ROOTFS_URL=https://example.com/dshd-rootfs.tar.gz
+  DSHD_ROOTFS_SHA256=deadbeef
+
+Verified in APK classes.dex:
+  &https://example.com/dshd-rootfs.tar.gz
+  deadbeef
+
+Then rebuilt without the test env (clean release):
+  example.com occurrences: 0
+  SHA-256: dab80835ba9e74afc589677b0f76fcd0edfa691dbe00b35f5a9552f2bc5978ef

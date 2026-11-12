@@ -1,0 +1,43 @@
+1
+00:00:00,350 --> 00:00:01,658
+DSHD.
+
+2
+00:00:01,708 --> 00:00:03,979
+Your AI workstation, in your pocket.
+
+3
+00:00:04,744 --> 00:00:06,123
+Built-in runtime.
+
+4
+00:00:06,173 --> 00:00:08,738
+One-time unpack, then straight to work.
+
+5
+00:00:09,498 --> 00:00:11,502
+Add a service address and key.
+
+6
+00:00:11,552 --> 00:00:12,738
+Connect your model.
+
+7
+00:00:13,484 --> 00:00:16,090
+Open any file for an instant preview.
+
+8
+00:00:16,798 --> 00:00:19,604
+A real terminal runs locally on the phone.
+
+9
+00:00:20,304 --> 00:00:21,754
+Clear permissions.
+
+10
+00:00:21,804 --> 00:00:24,216
+Files and runtime stay on your device.
+
+11
+00:00:26,100 --> 00:00:30,500
+DSHD is open source. Find it on GitHub. Link in the description.

@@ -1,0 +1,14 @@
+# Android project-key + LAN rootfs release E2E (2026-11-09)
+
+Uninstalled the test-key release, installed project-key LAN build:
+  dist/android/dshd-android-release-project-lan.apk
+  SHA-256: cdbc0ce442503b8bf1fb62058671332b79bb5061a70782969ad17a2b5d9586cc
+
+Rootfs URL: http://192.0.2.20:18082/dsh-rootfs.tar.gz (Mac LAN, Range server)
+flow: download 573.2 MB -> SHA-256 verify -> import -> provider form -> Host ->
+real model reply: "project key release" (9.1K tok, 2 s).
+Screenshot: android-project-lan-e2e.png
+
+This proves the project release key, non-loopback rootfs URL and clean install path.
+Still not production: URL is HTTP on a LAN host, not a public HTTPS endpoint,
+and the Mac must serve the archive.

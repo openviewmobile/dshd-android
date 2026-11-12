@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work on the Android app
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: APK version
+      placeholder: "0.3.1 (versionCode 4)"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device / Android / WebView
+      placeholder: "LGE-AN10, Android 12, Chromium 92"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Open ...\n2. Tap ..."
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: Remove provider keys, tokens and personal paths.
+      render: shell

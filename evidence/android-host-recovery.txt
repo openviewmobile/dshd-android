@@ -1,0 +1,12 @@
+# Android Host crash / port fallback evidence (2026-11-08)
+
+11-08 23:30:09.153 32693   307 W dshd    : service host exited: 137, retry 1 in 2s
+11-08 23:30:11.185 32693  3671 I dshd    : starting service host: /data/user/0/com.dshd.android/files/rootfs/lib/ld-linux-aarch64.so.1 --library-path /data/user/0/com.dshd.android/files/rootfs/lib/aarch64-linux-gnu:/data/user/0/com.dshd.android/files/rootfs/usr/lib/aarch64-linux-gnu:/data/user/0/com.dshd.android/files/rootfs/lib:/data/user/0/com.dshd.android/files/rootfs/usr/lib /data/user/0/com.dshd.android/files/rootfs/opt/node24/bin/node /data/user/0/com.dshd.android/files/rootfs/opt/node24/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --no-open --port 3080
+
+## port fallback (3080 occupied)
+11-08 23:25:05.318 30844 30926 I dshd : ... --port 3081
+11-08 23:25:10.162 30844 30931 I dshd : host: dsh web: http://127.0.0.1:3081/?token=<redacted>
+
+## restart after SIGKILL
+11-08 23:30:09.153 32693   307 W dshd    : service host exited: 137, retry 1 in 2s
+11-08 23:30:17.604 32693  3676 I dshd    : host: dsh web: http://127.0.0.1:3080/?token=<redacted>

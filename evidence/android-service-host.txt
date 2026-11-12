@@ -1,0 +1,16 @@
+# Android Host service verification (2026-11-08)
+
+## Service + foreground notification
+  * ServiceRecord{586c465 u0 com.dshd.android/.HostKeepAliveService}
+    intent={act=com.dshd.android.action.START_HOST cmp=com.dshd.android/.HostKeepAliveService}
+    infoAllowStartForeground=[callingPackage: com.dshd.android; callingUid: 10020; uidState: TOP ; intent: Intent { act=com.dshd.android.action.START_HOST cmp=com.dshd.android/.HostKeepAliveService }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:28; callerTargetSdkVersion:28; startForegroundCount:0; bindFromPackage:null]
+    isForeground=true foregroundId=1 foregroundNoti=Notification(channel=dsh-host shortcut=null contentView=null vibrate=null sound=null defaults=0x0 flags=0x62 color=0x00000000 groupKey=ranker_group1 actions=1 vis=PRIVATE)
+  * Destroy ServiceRecord{b50bb40 u0 com.dshd.android/.HostKeepAliveService}
+    intent={cmp=com.dshd.android/.HostKeepAliveService}
+
+## Host log after service start
+11-08 23:22:08.148 27258 28117 I dshd    : starting service host: /data/user/0/com.dshd.android/files/rootfs/lib/ld-linux-aarch64.so.1 --library-path /data/user/0/com.dshd.android/files/rootfs/lib/aarch64-linux-gnu:/data/user/0/com.dshd.android/files/rootfs/usr/lib/aarch64-linux-gnu:/data/user/0/com.dshd.android/files/rootfs/lib:/data/user/0/com.dshd.android/files/rootfs/usr/lib /data/user/0/com.dshd.android/files/rootfs/opt/node24/bin/node /data/user/0/com.dshd.android/files/rootfs/opt/node24/lib/node_modules/@deepseek-ai/dsh/lib/bin.js web --no-open --port 3080
+11-08 23:22:13.986 27258 28119 I dshd    : host: dsh web: http://127.0.0.1:3080/?token=<redacted>
+
+## After HOME + reopen: service stays foreground, Host not restarted
+5

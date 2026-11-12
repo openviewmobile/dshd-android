@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Dark window/splash so the first frame never flashes white. -->
+  <style name="Theme.DSHD" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <item name="android:windowBackground">@drawable/boot_window_background</item>
+    <item name="android:colorBackground">#F6F8FC</item>
+    <item name="android:statusBarColor">@color/boot_bg</item>
+    <item name="android:navigationBarColor">@color/boot_bg</item>
+    <item name="android:windowLightStatusBar">false</item>
+    <item name="android:windowLightNavigationBar">false</item>
+    <item name="android:windowActionModeOverlay">true</item>
+    <item name="android:windowNoTitle">true</item>
+  </style>
+</resources>

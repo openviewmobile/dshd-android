@@ -1,0 +1,107 @@
+# Android 逐界面截图（真机，项目 key release + fixed rootfs）
+
+01 ui-01-home.png                 会话首页，真实模型回复
+02 ui-02-sidebar.png              侧边栏（插件/自动化/工作区）
+03 ui-03-plugins-loading.png      插件页骨架屏
+04 ui-04-plugins.png              插件页加载完成，内置/实验性插件
+05 ui-05-plugin-enable-dialog.png 首次启用失败：空白页（URL.canParse 缺失）
+06 ui-06-plugins-after-polyfill.png 重装含 URL polyfill 的 rootfs 后插件页
+07 ui-07-toggle-team.png          再次启用，仍白屏（polyfill 未进 rootfs）
+08 ui-08-plugin-toggle-fixed.png  修复 rootfs polyfill 后进入插件详情
+09 ui-09-plugin-detail.png        AppleDouble 元数据错误
+10 ui-10-plugins-reloaded.png     清理 ._*.json 并重启后的插件页
+11 ui-11-plugin-detail-after-clean.png 详情正常
+12 ui-12-plugin-enabling.png      启用失败：root Include entry
+13 ui-13-plugins-after-restart.png 重启后插件已启用（3 组件运行中）
+14 ui-14-plugin-enabled.png       启用详情
+15 ui-15-plugin-disable-error.png 停用同样报 root Include
+16 ui-16-plugin-disabled-after-restart.png 重启后停用成功
+17 ui-17-add-plugin-dialog.png    添加插件对话框
+18 ui-19-plugin-install-run.png   whale pet 安装：spawn pnpm ENOENT
+19 ui-20-plugin-install-pnpm.png  内置 pnpm + PATH 后开始安装
+20 ui-22-plugin-install-pnpm2.png 安装 spinner
+21 ui-23-plugin-install-done.png  安装完成但 live reload 报 root Include
+22 ui-24-plugin-install-error.png 安装详情：pnpm 已成功，reload 失败
+23 ui-25-plugin-installed-restart.png 重启后“已安装插件”
+24 ui-26-installed-plugins.png    小鲸鱼已安装
+25 ui-27-whale-enable.png         启用报 root Include
+26 ui-28-whale-active-home.png    重启后小鲸鱼出现在首页（第三方插件生效）
+
+结论（修复前）：安装/启用/停用最终生效，但 HMR live reload 每次报
+`profile reload requires the root Include entry`，必须重启 Host。
+根因已定位并修复，见下方 27~34 与 android-ui-fixes.txt。
+
+27 ui-29-plugin-enable-live-fixed.png 首次修复后启用无报错（组件尚未启动）
+28 ui-30-plugin-enabled-live-fixed.png 详情（修复中间态：组件未启动）
+29 ui-31-whale-install-fixed.png 第三方插件安装成功（无失败）
+30 ui-32-whale-installed-live-fixed.png 已安装 + 立即启用
+31 ui-33-whale-enabled-live-fixed.png 小鲸鱼立即生效，无需重启
+32 ui-34-team-live-running-fixed.png 智能体团队 3 组件全部运行中
+33 ui-35-team-disabled-live-fixed.png 停用后 3 组件实时已关闭
+34 ui-36-whale-uninstalled-live-fixed.png 卸载后列表恢复、已安装区消失
+35 ui-37-provider-save-fixed.png Provider 保存不再返回 settings/rejected
+
+## 2026-11-09 第二轮全量 Android 验收（fixed5/fixed6）
+
+说明：ui-39 文件名有误，实际是“更多”菜单里的插件下拉（浏览更多插件/创建你的插件），
+不是 App 菜单；App 底部菜单见 ui-40。
+
+36 ui-38-sidebar-settings-entry.png 侧边栏底部“更多”入口
+37 ui-39-more-menu.png           “更多”面板中的插件下拉（文件名沿用）
+38 ui-40-app-menu.png            App 底部菜单：设置/意见反馈/登录
+39 ui-41-settings-general-broken.png 修复前 Settings 通用页严重错位；ui-41b-settings-general-early.png 为早期修复态
+40 ui-42-settings-models.png     模型列表（官方缺 key，自定义 newapi 激活）
+41 ui-43-settings-provider-edit.png 自定义 Provider 编辑器
+42 ui-44-settings-provider-custom-fields.png 展开字段（名称/URL/协议/模型目录）
+43 ui-45-settings-provider-saved.png 保存 toast：已保存 DeepSeek (newapi-gateway)
+44 ui-46-settings-builtin-plugins.png 修复前内置插件卡片过窄、标题截断
+45 ui-47-settings-builtin-plugins-fixed.png 注入 CSS 后单列卡片
+46 ui-48-settings-agent-presets.png Agent 预设卡片
+47 ui-49-settings-dark.png       深色外观
+48 ui-50-settings-english.png    英文界面（旧 148px 导航，Built-in plugi… 截断）
+49 ui-51-settings-english-fixed.png 164px 导航 + 换行标签，英文完整显示
+50 ui-52-settings-permission-options.png 权限下拉：只读/工作区内修改/完全权限
+51 ui-53-settings-general-fixed.png 中文通用页（临时注入 CSS）
+52 ui-54-new-session.png         新建会话空态
+53 ui-55-session-composer.png    选择默认工作区并输入真实 prompt
+54 ui-56-session-streaming.png   真实模型流式生成
+55 ui-57-session-reply.png       工具报错（workspace sandbox / rg）暴露问题
+56 ui-58-session-completed.png   30 秒完成真实回复
+57 ui-59-session-full-access.png 会话切到完全权限
+58 ui-60-full-access-confirm.png 完全权限风险确认（需勾选复选框）
+59 ui-61-agent-shell-full-access.png 完全权限下 pwd/ls 真实输出
+60 ui-62-clarify-question.png    ask-user 澄清提问（选项 1/2/3，跳过/提交）
+61 ui-63-clarify-skipped.png     跳过澄清后继续执行
+62 ui-64-session-list.png        会话层级视图
+63 ui-65-sidebar-history.png     侧边栏历史会话
+64 ui-66-session-search.png      会话搜索命中
+65 ui-67-session-persisted.png   force-stop 后历史与“已停止”状态保留
+66 ui-68-host-notification.png   Host 前台通知（dsh is running / STOP）
+67 ui-69-landscape-session.png   横屏（打开的命令面板遮挡）
+68 ui-70-landscape-clean.png     横屏干净布局
+69 ui-71-rootfs-installer.png    首启 rootfs 安装器（导入/下载）
+70 ui-72-fixed5-home.png         rootfs 下载并配置 Provider 后进入首页
+71 ui-73-settings-general-persisted.png fixed5 持久化 CSS 后的通用页（无需注入）
+72 ui-74-upgrade-preserved.png   install -r 升级保留数据；更新时进行中的任务被中止并明确提示
+73 ui-75-agent-file-task.png     完全权限真实任务：写 hello.txt、相对 glob、读回、diff
+74 ui-76-agent-team-enabled.png  实时加入 Agent Teams bundle，头部出现团队入口，新增 6 工具
+75 ui-77-agent-team-task-complete.png 真实团队任务：alpha/beta 两个队友并行写文件并汇总
+76 ui-78-agent-team-panel.png    团队面板：3 名成员（lead/alpha/beta），共享任务为空
+77 ui-79-new-session-full-access-default.png 结束空白会话后新建：默认完全权限（验证 Settings 默认值生效；空白会话复用会保留旧权限）
+78 ui-80-absolute-glob-fixed.png 绝对 /home/... glob 已可用（rg 参数映射到 CORTEX_ROOT；返回物理路径，属显示层小问题）
+79 ui-81-workspace-actions.png 工作区菜单：重命名 / 在文件夹显示（Android 禁用）/ 删除工作区
+80 ui-82-workspace-renamed.png 工作区重命名为 Default（已持久化）
+81 ui-83-workspace-qawork.png 通过内置目录选择器新建 QAWork 文件夹并作为第二工作区打开
+82 ui-84-session-pinned.png 会话置顶（已置顶标记，可取消）
+83 ui-85-fixed8-agent-team-complete.png fixed8 团队任务：task-1 完成，file-writer 写出 648B 文件
+84 ui-86-fixed8-team-panel.png fixed8 团队面板：2 成员、共享任务板显示已完成 task-1
+85 ui-87-keyboard-portrait.png 竖屏键盘：会话可滚动，输入框/发送按钮在键盘上方
+86 ui-88-keyboard-landscape.png 修复前横屏键盘：正文与输入框全被顶出视口（仅剩头部/底栏）
+87 ui-89-landscape-keyboard-fixed.png adjustResize 单独未修复，仍空白
+88 ui-90-landscape-keyboard-recreated.png 修复后横屏：正文与输入框完整可见（旋转重建 Activity）
+89 ui-91-landscape-keyboard-visible.png 修复后横屏输入区（键盘未弹出时）
+90 ui-92-plugin-index-enabled.png 语音输入实验插件详情（4 组件，启用前全部关闭）
+91 ui-93-voice-input-enable.png 语音输入启用后 4/4 组件运行中（未下载模型/未录音）
+92 ui-94-plugin-index-enabled.png 自定义插件索引启用后插件页出现“发现”标签
+93 ui-95-auto-review-enabled.png 自动授权审查启用（提供“自动审查”访问模式）
+94 ui-96-session-archived.png 归档会话成功（toast“会话已归档，可筛选已归档会话”，列表移除）

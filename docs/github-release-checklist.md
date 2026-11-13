@@ -13,8 +13,8 @@
 | 默认分支 | ⬜ | `main` |
 | Social preview | ✅ 已生成 | `docs/assets/social-preview.png`（1280×640，上传到仓库设置） |
 | README 顶部预览 | ✅ | `docs/assets/social-preview.png` |
-| 英文 README | ✅ | `README.en.md` |
-| 中文 README | ✅ | `README.md` |
+| 英文 README（默认） | ✅ | `README.md` |
+| 中文 README | ✅ | `README.zh.md` |
 
 ## 2. 法律与第三方
 

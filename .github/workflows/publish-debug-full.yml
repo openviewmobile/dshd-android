@@ -1,0 +1,55 @@
+name: Publish full debug APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Actions run containing the full debug artifact
+        required: true
+        default: '43464194850'
+      artifact_name:
+        description: Artifact name
+        required: true
+        default: dshd-android-full-debug-c5bff412b857c4392f45d147d241b9eaeec79fb5
+      release_tag:
+        description: Pre-release tag
+        required: true
+        default: v0.3.2-full-debug
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download full APK artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ inputs.run_id }}
+          ARTIFACT: ${{ inputs.artifact_name }}
+        run: |
+          mkdir -p artifact
+          gh run download "$RUN_ID" -n "$ARTIFACT" -D artifact
+          ls -lh artifact
+      - name: Verify APK checksum
+        run: |
+          EXPECTED=$(awk '{print $1}' artifact/app-debug.apk.sha256)
+          ACTUAL=$(sha256sum artifact/app-debug.apk | awk '{print $1}')
+          test "$EXPECTED" = "$ACTUAL"
+          cp artifact/app-debug.apk dshd-android-0.3.2-full-debug.apk
+          sha256sum dshd-android-0.3.2-full-debug.apk > dshd-android-0.3.2-full-debug.apk.sha256
+      - name: Publish pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.release_tag }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" \
+              --title "DSHD for Android 0.3.2 — full CI debug build" \
+              --notes "Full embedded-rootfs APK built by GitHub Actions. This is a debug-signed CI build for testing, not the production-signed release. No local APK was uploaded." \
+              --prerelease
+          gh release upload "$TAG" \
+            dshd-android-0.3.2-full-debug.apk \
+            dshd-android-0.3.2-full-debug.apk.sha256 --clobber

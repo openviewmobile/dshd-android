@@ -12,6 +12,7 @@
 | [third-party.md](third-party.md) | 第三方组件与再分发清单 |
 | [demo.md](demo.md) | 首次使用 GIF/中英文语音演示的素材与重建方法 |
 | [release.md](release.md) | 构建、签名、rootfs 托管、发布门禁 |
+| [full-release.md](full-release.md) | 完整内置 rootfs APK 的 GitHub Actions 发布流程 |
 | [release-notes-0.3.2.md](release-notes-0.3.2.md) | 0.3.2 发布说明与下载校验值 |
 | [startup-performance.md](startup-performance.md) | 启动耗时测量、优化与后续空间 |
 | [public-repo-security.md](public-repo-security.md) | 公开仓库安全/隐私审计与清理记录 |

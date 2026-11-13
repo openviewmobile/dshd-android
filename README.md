@@ -86,7 +86,7 @@ with `scripts/make-rootfs-archive.sh`; apply Chromium 92 patches with
 GitHub Actions builds the **lite debug APK** from source on push/PR and
 uploads it as a workflow artifact with a SHA-256 file. Local `dist/` APKs are
 never committed or uploaded. A full embedded-rootfs production APK still needs
-a separately hosted rootfs and signing secrets; see [docs/release.md](docs/release.md).
+a separately hosted rootfs and signing secrets; see [docs/full-release.md](docs/full-release.md).
 
 See [docs/packaging.md](docs/packaging.md), [docs/architecture.md](docs/architecture.md),
 [docs/testing.md](docs/testing.md) and [docs/release.md](docs/release.md) for details.

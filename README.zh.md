@@ -83,7 +83,7 @@ evidence/android-acceptance-2026-11-10.md。
 
 默认 APK 不再需要 rootfs 下载地址；CI/调试可用 `DSHD_EMBED_ROOTFS=none` 构建约 1 MB 的 lite 包。
 
-GitHub Actions 在 push/PR 时用仓库源码构建 **lite debug APK** 并上传为 workflow artifact（含 SHA-256），不会提交或上传本地 `dist/` APK。完整内置 rootfs 的发布 APK 仍需另行托管 rootfs 并配置签名 secrets，见 [docs/release.md](docs/release.md)。
+GitHub Actions 在 push/PR 时用仓库源码构建 **lite debug APK** 并上传为 workflow artifact（含 SHA-256），不会提交或上传本地 `dist/` APK。完整内置 rootfs 的发布 APK 仍需另行托管 rootfs 并配置签名 secrets，见 [docs/full-release.md](docs/full-release.md)。
 fixed20-strip / fixed20-clean 是历史回溯包，不含本次原生 PDF 桥补丁；0.3.2 请使用 `fixed22-nativepdf`。体积构成和可删项见 [docs/rootfs-size.md](docs/rootfs-size.md)。
 
 重复测试：

@@ -35,7 +35,9 @@ scripts/build-release-apk.sh
 
 输出：`dist/dshd-android-release.apk`。
 
-## 当前产物
+## 当前本地产物（不提交/不上传）
+
+以下路径与哈希仅用于本机验收；仓库和 GitHub Release 不包含这些 APK/rootfs 文件。
 
 | 产物 | SHA-256 |
 |---|---|

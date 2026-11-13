@@ -3,9 +3,17 @@
 First-use and 16:9 promo media are generated locally (see `demo/README.md` and
 `docs/youtube-promo.md`); large video files are not stored in Git.
 
-## Download
+## Builds
 
-| Asset | Size | SHA-256 |
+This public repository does **not** attach APKs. GitHub Actions builds a
+lite debug APK from source and uploads it as a workflow artifact with a
+SHA-256 file. The full embedded-rootfs production APK requires the rootfs
+asset and release signing secrets.
+
+The hashes below are local pre-publication acceptance references only; they are
+not downloadable from this repository:
+
+| Local asset | Size | SHA-256 |
 | --- | --- | --- |
 | `dshd-android-release.apk` (embedded runtime) | 144 MB | `73b7c945590a5dd37475256744046548d61ec403f8aba60c9fa2ea3697be0db5` |
 | `dshd-android-release-lite.apk` (no runtime) | 856 KB | `4e4c4e737d91d0dd27ad6714a2e0a61963ab7b512033f43420edc8573fb3377f` |

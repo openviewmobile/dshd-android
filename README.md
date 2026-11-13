@@ -71,7 +71,7 @@ YouTube 16:9 宣传片的标题/简介/标签/章节/缩略图见 [docs/youtube-
 agent-team、worktree、auto-review、语音和 whale-pet。结论与证据：
 evidence/android-acceptance-2026-11-10.md。
 
-当前 0.3.2 包（包名/图标/签名/屏幕适配/SD 卡见
+当前 0.3.2 **本地验收构建**（未提交到仓库；包名/图标/签名/屏幕适配/SD 卡见
 [docs/packaging.md](docs/packaging.md)）：
 
 - `dist/dshd-android-release.apk`（内置 fixed22-nativepdf，144 MB）

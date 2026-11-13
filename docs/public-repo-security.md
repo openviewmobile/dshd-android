@@ -23,7 +23,7 @@ third-party security review.
 - Git object/history scan for the same patterns. It found an old local
   `dsh web` token in a historical evidence log and private LAN addresses in
   evidence files. These are not in the public root commit.
-- Tracked file scan for `/Users/figotan`, personal e-mail addresses in content,
+- Tracked file scan for ``<local-user-path>``, personal e-mail addresses in content,
   and the local account name.
 - Image review of provider/setup/chat screenshots found no API key, bearer
   token, account name or e-mail. The public tree keeps only the five 0.3.2

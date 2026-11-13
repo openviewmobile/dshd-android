@@ -1,5 +1,7 @@
 # DSHD for Android（DeepSeek Harness Desktop）
 
+[![Android APK](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml/badge.svg)](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml)
+
 [English](README.en.md) · 中文
 
 ![DSHD](docs/assets/social-preview.png)

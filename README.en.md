@@ -1,5 +1,7 @@
 # DSHD for Android
 
+[![Android APK](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml/badge.svg)](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml)
+
 [中文](README.md) · English
 
 **DSHD** stands for **DeepSeek Harness Desktop**. This project packages a

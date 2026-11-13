@@ -6,9 +6,10 @@ third-party security review.
 
 ## Publication model
 
-- **Only source, docs, tests and demo media are published.** `dist/`, rootfs
-  archives, APKs, Gradle outputs, generated demo frames and the release
-  keystore are gitignored.
+- **Only source, docs, tests and small thumbnails are published.** `dist/`,
+  rootfs archives, APKs, Gradle outputs, generated demo frames and the release
+  keystore are gitignored. Large GIF/MP4 demo files are generated locally and
+  are not part of the public tree.
 - **No APK from the local `dist/` directory is uploaded.** GitHub Actions builds
   a lite debug APK from source and uploads it as a workflow artifact.
 - The public branch starts with a fresh root commit. The local pre-publication
@@ -24,9 +25,9 @@ third-party security review.
   evidence files. These are not in the public root commit.
 - Tracked file scan for `/Users/figotan`, personal e-mail addresses in content,
   and the local account name.
-- Image review of provider/setup/chat screenshots: no API key, bearer token,
-  account name or e-mail was visible. Screenshots do show the test device model
-  and normal app/chat content.
+- Image review of provider/setup/chat screenshots found no API key, bearer
+  token, account name or e-mail. The public tree keeps only the five 0.3.2
+  launch/PDF screenshots; earlier per-screen screenshots were removed.
 - Commit identity changed to the GitHub noreply address
   `aiman2050@users.noreply.github.com` for the public history.
 - No keystore, `*.password`, `.env`, `.npmrc` with credentials, or `dist/`
@@ -40,10 +41,10 @@ documentation addresses (`192.0.2.0/24`), and local macOS paths with
 
 ## Residual risks
 
-- The repository contains deliberate **test evidence** (adb logs, screenshots,
-  model replies) from a physical test device. It does not contain credentials,
-  but it does reveal the device model and that the author tested a model
-  endpoint. Remove `evidence/` if that metadata is not acceptable.
+- The repository contains deliberate **text evidence** and five 0.3.2
+  screenshots from a physical test device. It does not contain credentials, but
+  it does reveal the device model and that the author tested a model endpoint.
+  Remove `evidence/` if that metadata is not acceptable.
 - Demo media contains the product UI and generic test file names; no personal
   documents are included.
 - The app talks to a user-configured OpenAI-compatible endpoint. The README and

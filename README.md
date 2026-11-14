@@ -145,10 +145,11 @@ no local APK is committed or uploaded.
 
 ## Documentation
 
-- [Documentation index](docs/README.md)
+- [Documentation index](docs/README.md) · [中文索引](docs/README.zh.md)
 - [Architecture](docs/architecture.md) · [Packaging](docs/packaging.md) · [Testing](docs/testing.md)
 - [Full release process](docs/full-release.md) · [Security audit](docs/public-repo-security.md)
-- [Contributing](CONTRIBUTING.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md)
+- [Provenance](docs/provenance.md) · [SBOM](sbom.spdx.json)
+- [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security policy](SECURITY.md) · [Changelog](CHANGELOG.md)
 
 ## License
 

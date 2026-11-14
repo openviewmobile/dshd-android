@@ -137,10 +137,11 @@ GitHub Actions 会在每次 push/PR 构建 lite debug APK。完整内置 rootfs 
 
 ## 文档
 
-- [文档索引](docs/README.md)
+- [文档索引](docs/README.zh.md)
 - [架构](docs/architecture.md) · [打包](docs/packaging.md) · [测试](docs/testing.md)
 - [完整发布流程](docs/full-release.md) · [安全审计](docs/public-repo-security.md)
-- [贡献指南](CONTRIBUTING.md) · [安全策略](SECURITY.md) · [更新日志](CHANGELOG.md)
+- [构建溯源](docs/provenance.md) · [SBOM](sbom.spdx.json)
+- [贡献指南](CONTRIBUTING.md) · [行为准则](CODE_OF_CONDUCT.md) · [安全策略](SECURITY.md) · [更新日志](CHANGELOG.md)
 
 ## 许可证
 

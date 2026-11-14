@@ -1,0 +1,113 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "DSHD for Android 0.3.2",
+  "documentNamespace": "https://github.com/openviewmobile/dshd-android/sbom/0.3.2",
+  "creationInfo": {
+    "created": "2026-11-14T00:00:00Z",
+    "creators": ["Tool: DSHD manual SBOM"],
+    "comment": "Inventory of the production 0.3.2 APK and its embedded runtime. Not a substitute for the third-party notices shipped in the APK/rootfs."
+  },
+  "packages": [
+    {
+      "name": "DSHD for Android APK",
+      "SPDXID": "SPDXRef-Package-DSHD-Android",
+      "versionInfo": "0.3.2",
+      "downloadLocation": "https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "copyrightText": "DSHD contributors",
+      "externalRefs": [
+        {"referenceCategory": "PACKAGE-MANAGER", "referenceType": "purl", "referenceLocator": "pkg:github/openviewmobile/dshd-android@0.3.2"}
+      ]
+    },
+    {
+      "name": "DSHD Android shell",
+      "SPDXID": "SPDXRef-Package-DSHD-Shell",
+      "downloadLocation": "NOASSERTION",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0"
+    },
+    {
+      "name": "DeepSeek Harness dsh",
+      "SPDXID": "SPDXRef-Package-dsh",
+      "versionInfo": "0.2.2-rc.1",
+      "downloadLocation": "https://www.npmjs.com/package/@deepseek-ai/dsh",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT",
+      "externalRefs": [
+        {"referenceCategory": "PACKAGE-MANAGER", "referenceType": "purl", "referenceLocator": "pkg:npm/%40deepseek-ai/dsh@0.2.2-rc.1"}
+      ]
+    },
+    {
+      "name": "Cortex",
+      "SPDXID": "SPDXRef-Package-Cortex",
+      "versionInfo": "1.26.50",
+      "downloadLocation": "https://github.com/ssfuisu/cortex",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0"
+    },
+    {
+      "name": "Node.js linux-arm64",
+      "SPDXID": "SPDXRef-Package-Node",
+      "versionInfo": "24.22.2",
+      "downloadLocation": "https://nodejs.org/dist/v24.22.2/",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "name": "Ubuntu 24.04 userland",
+      "SPDXID": "SPDXRef-Package-Ubuntu",
+      "versionInfo": "24.04",
+      "downloadLocation": "https://archive.ubuntu.com/",
+      "filesAnalyzed": false,
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "comment": "Mixed licenses. /usr/share/doc/*/copyright is preserved in the rootfs."
+    },
+    {
+      "name": "PDF.js / pdfjs-dist",
+      "SPDXID": "SPDXRef-Package-PDFJS",
+      "versionInfo": "6.3.289",
+      "downloadLocation": "https://www.npmjs.com/package/pdfjs-dist",
+      "filesAnalyzed": false,
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0"
+    },
+    {
+      "name": "xterm.js",
+      "SPDXID": "SPDXRef-Package-xterm",
+      "versionInfo": "6.0.0",
+      "downloadLocation": "https://www.npmjs.com/package/xterm",
+      "filesAnalyzed": false,
+      "licenseConcluded": "MIT",
+      "licenseDeclared": "MIT"
+    },
+    {
+      "name": "org.tukaani:xz",
+      "SPDXID": "SPDXRef-Package-xz",
+      "versionInfo": "1.10",
+      "downloadLocation": "https://repo1.maven.org/maven2/org/tukaani/xz/1.10/",
+      "filesAnalyzed": false,
+      "licenseConcluded": "0BSD",
+      "licenseDeclared": "0BSD"
+    }
+  ],
+  "relationships": [
+    {"spdxElementId": "SPDXRef-DOCUMENT", "relationshipType": "DESCRIBES", "relatedSpdxElement": "SPDXRef-Package-DSHD-Android"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-DSHD-Shell"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-dsh"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-Cortex"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-Node"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-Ubuntu"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-PDFJS"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-xterm"},
+    {"spdxElementId": "SPDXRef-Package-DSHD-Android", "relationshipType": "CONTAINS", "relatedSpdxElement": "SPDXRef-Package-xz"}
+  ]
+}

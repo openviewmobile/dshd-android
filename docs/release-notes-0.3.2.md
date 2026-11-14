@@ -3,20 +3,17 @@
 First-use and 16:9 promo media are generated locally (see `demo/README.md` and
 `docs/youtube-promo.md`); large video files are not stored in Git.
 
-## Builds
+## Download
 
-This public repository does **not** attach APKs. GitHub Actions builds a
-lite debug APK from source and uploads it as a workflow artifact with a
-SHA-256 file. The full embedded-rootfs production APK requires the rootfs
-asset and release signing secrets.
+The production-signed full APK is attached to the [0.3.2 release](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2).
 
-The hashes below are local pre-publication acceptance references only; they are
-not downloadable from this repository:
-
-| Local asset | Size | SHA-256 |
+| Asset | Size | SHA-256 |
 | --- | --- | --- |
-| `dshd-android-release.apk` (embedded runtime) | 144 MB | `73b7c945590a5dd37475256744046548d61ec403f8aba60c9fa2ea3697be0db5` |
-| `dshd-android-release-lite.apk` (no runtime) | 856 KB | `4e4c4e737d91d0dd27ad6714a2e0a61963ab7b512033f43420edc8573fb3377f` |
+| `dshd-android-release.apk` (embedded runtime, release-signed) | 144 MB | `aa4e9783e7af547227f9c22970645cfe6daca41b54f11aed814a18b3c7ba3079` |
+| `dshd-android-release.apk.sha256` | 91 B | — |
+
+The APK was built by GitHub Actions from the sanitized rootfs and re-signed
+with the DSHD release key. No local APK was uploaded.
 
 The embedded rootfs is SHA-256 versioned. Upgrading from 0.3.1 replaces the
 runtime and keeps `.dsh`, Documents, workspace, SSH/GPG keys and `.npmrc`.

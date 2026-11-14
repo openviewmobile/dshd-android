@@ -2,7 +2,7 @@
 
 **DeepSeek Harness Desktop — a real AI workstation on your Android phone.**
 
-[**Download the current APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2-full-debug/dshd-android-0.3.2-full-debug.apk) ·
+[**Download the current APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk) ·
 [Install guide](#install) · [Screenshots](#screenshots) · [中文](README.zh.md)
 
 [![Android APK](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml/badge.svg)](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml)
@@ -15,12 +15,11 @@ its web UI into one APK. It runs on the phone itself: no PC, no root, no Termux,
 no separate Linux installer.
 
 > **Current download:** `0.3.2` with the full embedded runtime, built by GitHub
-> Actions. This build is **debug-signed** and intended for testing/first
-> installation. A production-signed release is not published yet.
+> Actions. This build is **production-signed** with the DSHD release key.
 >
 > APK: **144 MB** · SHA-256:
-> `4431d5859979537c182e621037d6583390eb6819e221898b753ef920f0550647`
-> · [checksum file](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2-full-debug/dshd-android-0.3.2-full-debug.apk.sha256)
+> `aa4e9783e7af547227f9c22970645cfe6daca41b54f11aed814a18b3c7ba3079`
+> · [checksum file](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk.sha256)
 
 ## What you get
 
@@ -58,9 +57,9 @@ More evidence: [acceptance report](evidence/android-acceptance-0.3.2.md).
 
 Open this link **on the Android phone**:
 
-[**dshd-android-0.3.2-full-debug.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2-full-debug/dshd-android-0.3.2-full-debug.apk)
+[**dshd-android-0.3.2-full-debug.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk)
 
-Or open the [release page](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2-full-debug)
+Or open the [release page](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2)
 and download the `.apk` asset. The `.sha256` file is next to it.
 
 ### 2. Allow installation
@@ -122,8 +121,8 @@ Tap **SAVE AND START DSH**. The local host starts and the workspace opens.
   selected or copied.
 - Android 9+ arm64 only; x86 emulator images are not shipped.
 - This is an independent project, not an official DeepSeek product.
-- The current public APK is **debug-signed**. Do not treat it as a production
-  upgrade channel.
+- The current public APK is signed with the project release key; keep the
+  checksum for verification.
 
 ## Build from source
 

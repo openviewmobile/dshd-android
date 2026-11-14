@@ -2,7 +2,7 @@
 
 **DeepSeek Harness Desktop —— 在 Android 手机上运行真正的 AI 工作站。**
 
-[**下载当前 APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2-full-debug/dshd-android-0.3.2-full-debug.apk) ·
+[**下载当前 APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk) ·
 [安装说明](#安装) · [界面截图](#截图) · [English](README.md)
 
 [![Android APK](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml/badge.svg)](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml)
@@ -14,12 +14,12 @@ DSHD 把完整的 Linux 运行时、Node.js、DeepSeek Harness Host 和 Web UI �
 APK。它直接运行在手机上：不需要电脑、不需要 root、不需要 Termux，也不需要另外
 安装 Linux。
 
-> **当前下载：** `0.3.2`，内置完整运行时，由 GitHub Actions 构建。这个包使用
-> **debug 签名**，用于测试和首次安装；生产签名版本尚未发布。
+> **当前下载：** `0.3.2`，内置完整运行时，由 GitHub Actions 构建，使用
+> **DSHD 发布密钥签名**。
 >
 > APK：**144 MB** · SHA-256：
-> `4431d5859979537c182e621037d6583390eb6819e221898b753ef920f0550647`
-> · [校验文件](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2-full-debug/dshd-android-0.3.2-full-debug.apk.sha256)
+> `aa4e9783e7af547227f9c22970645cfe6daca41b54f11aed814a18b3c7ba3079`
+> · [校验文件](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk.sha256)
 
 ## 你能得到什么
 
@@ -56,9 +56,9 @@ APK。它直接运行在手机上：不需要电脑、不需要 root、不需要
 
 请用 **Android 手机**打开：
 
-[**dshd-android-0.3.2-full-debug.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2-full-debug/dshd-android-0.3.2-full-debug.apk)
+[**dshd-android-0.3.2-full-debug.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk)
 
-也可以打开 [Release 页面](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2-full-debug)
+也可以打开 [Release 页面](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2)
 下载 `.apk`；同目录下有 `.sha256` 校验文件。
 
 ### 第 2 步：允许安装
@@ -115,7 +115,7 @@ APK。它直接运行在手机上：不需要电脑、不需要 root、不需要
 - PDF 页面由原生渲染为图片，PDF 内文字暂不支持选择/复制。
 - 仅支持 Android 9+ arm64；不提供 x86 模拟器镜像。
 - 这是独立项目，不是 DeepSeek 官方产品。
-- 当前公开 APK 使用 **debug 签名**，不要把它当作生产升级通道。
+- 当前公开 APK 使用项目发布密钥签名；下载后建议核对校验值。
 
 ## 从源码构建
 

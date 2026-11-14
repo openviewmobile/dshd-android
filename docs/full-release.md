@@ -6,9 +6,11 @@ attaches it to a GitHub Release. **No local APK is uploaded.**
 
 ## Prerequisites
 
-1. A **sanitized** rootfs `.tar.xz` hosted at a public HTTPS URL (GitHub Release
-   asset or object storage). It must not contain `.ssh`, host SSH private keys,
-   provider credentials, logs, or local user paths.
+1. The sanitized rootfs `.tar.xz` is published at
+   <https://github.com/openviewmobile/dshd-android/releases/tag/rootfs-0.3.2>
+   (SHA-256 `0c91ec900505963afe6cb7e2240bd0161a1d59bd46dc1a6e3a397c7395b18635`).
+   It contains no `.ssh`, host SSH private keys, provider credentials, logs, or
+   local user paths.
 2. Repository secrets:
    - `ANDROID_KEYSTORE_BASE64` — base64 of the release `.jks`
    - `ANDROID_KEYSTORE_PASSWORD`
@@ -21,11 +23,9 @@ Never commit the keystore, its password, or a rootfs containing credentials.
 
 ## Run
 
-From GitHub: **Actions → Full APK release → Run workflow**, fill:
-
-- `rootfs_url`
-- `rootfs_sha256`
-- `tag` (existing tag, e.g. `v0.3.2`)
+From GitHub: **Actions → Full APK release → Run workflow**. The defaults point
+to the published `rootfs-0.3.2` asset and tag `v0.3.2`; no parameters are
+required.
 
 The workflow:
 

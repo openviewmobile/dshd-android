@@ -6,6 +6,7 @@ on:
       rootfs_url:
         description: Public HTTPS URL of the sanitized rootfs .tar.xz
         required: true
+        default: https://github.com/openviewmobile/dshd-android/releases/download/rootfs-0.3.2/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf-sanitized.tar.xz
       rootfs_sha256:
         description: SHA-256 of that rootfs archive
         required: true

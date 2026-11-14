@@ -1,0 +1,50 @@
+name: Publish sanitized rootfs
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_tag:
+        description: Release tag containing the full APK
+        required: true
+        default: v0.3.2
+      rootfs_tag:
+        description: Release tag for the rootfs asset
+        required: true
+        default: rootfs-0.3.2
+
+permissions:
+  contents: write
+
+jobs:
+  publish-rootfs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download full APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ inputs.source_tag }}
+        run: |
+          mkdir -p source
+          gh release download "$TAG" -p dshd-android-release.apk -D source
+          ls -lh source
+      - name: Extract embedded rootfs
+        run: |
+          unzip -p source/dshd-android-release.apk assets/rootfs.tar.xz > dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf-sanitized.tar.xz
+          echo "0c91ec900505963afe6cb7e2240bd0161a1d59bd46dc1a6e3a397c7395b18635  dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf-sanitized.tar.xz" | sha256sum -c -
+          sha256sum dshd-rootfs-*.tar.xz > SHA256SUMS
+          ls -lh dshd-rootfs-*.tar.xz SHA256SUMS
+      - name: Publish rootfs release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.rootfs_tag }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" \
+              --title "DSHD sanitized runtime rootfs 0.3.2" \
+              --notes "Sanitized embedded rootfs extracted from the production-signed 0.3.2 APK. Public source for reproducible full APK builds." \
+              --prerelease
+          gh release upload "$TAG" \
+            dshd-rootfs-*.tar.xz SHA256SUMS --clobber

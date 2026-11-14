@@ -2,8 +2,17 @@
 
 Repository: <https://github.com/openviewmobile/dshd-android>
 
-The code side is complete; these settings are repository **administrative**
-actions and are not stored in Git. Run them once from a maintainer account.
+Status on 2026-11-14:
+
+- Topics: set.
+- Social preview: uploaded (hash matches `assets/social-preview.png`).
+- Private vulnerability reporting: enabled.
+- Dependabot alerts: enabled.
+- Secret scanning alerts: enabled.
+- Dependabot PRs #5, #6, #8: closed/deferred.
+- Branch protection/ruleset: **still pending** (the web form did not persist; `GITHUB_TOKEN` cannot create protection rules).
+
+The remaining branch-protection step needs a maintainer/admin session.
 
 ## About
 

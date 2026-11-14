@@ -13,9 +13,6 @@ on:
         description: Existing tag to attach the APK to
         required: true
         default: v0.3.2
-  push:
-    tags: ['v*']
-
 permissions:
   contents: write
 

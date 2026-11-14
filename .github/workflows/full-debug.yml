@@ -11,7 +11,6 @@ on:
         description: SHA-256 of the rootfs archive
         required: true
         default: 0c91ec900505963afe6cb7e2240bd0161a1d59bd46dc1a6e3a397c7395b18635
-        default: 0c91ec900505963afe6cb7e2240bd0161a1d59bd46dc1a6e3a397c7395b18635
 
 permissions:
   contents: read

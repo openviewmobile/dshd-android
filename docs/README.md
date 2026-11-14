@@ -1,6 +1,6 @@
 # Android 项目文档
 
-项目入口与快速开始见 [../README.md](../README.md)。
+项目入口与快速开始见 [../README.zh.md](../README.zh.md)（中文）或 [../README.md](../README.md)（English）。
 
 | 文档 | 内容 |
 |---|---|

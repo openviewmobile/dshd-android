@@ -1,0 +1,100 @@
+name: Publish production-signed full APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Run containing the full debug APK artifact
+        required: true
+        default: '43464194850'
+      source_artifact:
+        description: Full debug artifact name
+        required: true
+        default: dshd-android-full-debug-c5bff412b857c4392f45d147d241b9eaeec79fb5
+      release_tag:
+        description: Release tag to attach the signed APK to
+        required: true
+        default: v0.3.2
+
+permissions:
+  contents: write
+
+jobs:
+  resign:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download full APK artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_ID: ${{ inputs.source_run_id }}
+          ARTIFACT: ${{ inputs.source_artifact }}
+        run: |
+          mkdir -p artifact
+          gh run download "$RUN_ID" -n "$ARTIFACT" -D artifact
+          ls -lh artifact
+
+      - name: Verify source APK
+        run: |
+          test -s artifact/app-debug.apk
+          unzip -l artifact/app-debug.apk | grep -q 'assets/rootfs.tar.xz'
+          EXPECTED=$(awk '{print $1}' artifact/app-debug.apk.sha256)
+          ACTUAL=$(sha256sum artifact/app-debug.apk | awk '{print $1}')
+          test "$EXPECTED" = "$ACTUAL"
+
+      - name: Remove debug signature and re-sign with release key
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          chmod 600 "$RUNNER_TEMP/release.jks"
+          cp artifact/app-debug.apk unsigned.apk
+          # Strip the debug v1 signature files. v2/v3 signatures are replaced
+          # by apksigner below; the APK payload itself is unchanged.
+          zip -d unsigned.apk 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.EC' 'META-INF/*.DSA' >/dev/null 2>&1 || true
+          APKSIGNER="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          "$APKSIGNER" sign \
+            --ks "$RUNNER_TEMP/release.jks" \
+            --ks-key-alias "$ANDROID_KEY_ALIAS" \
+            --ks-pass "env:ANDROID_KEYSTORE_PASSWORD" \
+            --key-pass "env:ANDROID_KEY_PASSWORD" \
+            --v1-signing-enabled false \
+            --v2-signing-enabled true \
+            --v3-signing-enabled true \
+            --out dshd-android-release.apk \
+            unsigned.apk
+          "$APKSIGNER" verify --print-certs dshd-android-release.apk
+          sha256sum dshd-android-release.apk > dshd-android-release.apk.sha256
+          ls -lh dshd-android-release.apk
+          cat dshd-android-release.apk.sha256
+
+      - name: Upload signed APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dshd-android-signed-full
+          path: |
+            dshd-android-release.apk
+            dshd-android-release.apk.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Attach to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.release_tag }}
+        run: |
+          gh release view "$TAG" >/dev/null 2>&1 || \
+            gh release create "$TAG" \
+              --title "DSHD for Android 0.3.2" \
+              --notes "Production-signed APK with the full embedded runtime, built on GitHub Actions and re-signed with the release key. No local APK was uploaded." \
+              --latest
+          gh release upload "$TAG" \
+            dshd-android-release.apk \
+            dshd-android-release.apk.sha256 --clobber

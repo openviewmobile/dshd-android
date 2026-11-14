@@ -36,7 +36,7 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" --install "platforms;android-35" "build-tools;35.0.0"
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
       - name: Download and verify rootfs
         env:
           ROOTFS_URL: ${{ inputs.rootfs_url }}

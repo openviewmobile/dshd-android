@@ -11,7 +11,7 @@ DSHD（DeepSeek Harness Desktop）首次启动自动解包到 App 私有目录�
 
 | 组件 | 职责 |
 |---|---|
-| `MainActivity` | 原生设置表单、WebView、SAF 文件选择、生命周期；协调启动页显隐 |
+| `MainActivity`（Kotlin） | 原生设置表单、WebView、SAF 文件选择、生命周期；协调启动页显隐 |
 | `BootOverlay` | 深色品牌启动页、分阶段文案、解包/启动进度；Web UI 就绪后淡出 |
 | `HostKeepAliveService` | 前台服务持有 Host 进程、token/端口、失败重启与通知 |
 | `RootfsInstaller` | 内置/外部 rootfs 流式导入、gzip/xz 解包、用户数据复制 |

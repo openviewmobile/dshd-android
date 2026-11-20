@@ -6,7 +6,7 @@ components too. This page is the inventory; it is not legal advice.
 
 | Component | Version / source | License | Notes |
 | --- | --- | --- | --- |
-| DSHD Android shell | this repository | Apache-2.0 | Java, Gradle, scripts, docs. |
+| DSHD Android shell | this repository | Apache-2.0 | Kotlin, Gradle, scripts, docs. |
 | DeepSeek Harness (`dsh`) | npm `@deepseek-ai/dsh` | MIT | Web host and client plugins. |
 | Cortex | Cortex v1.26.50 | Apache-2.0 | glibc userland launcher and `libcortex-hook.so`. |
 | Node.js | official linux-arm64 v24.22.2 | MIT | Includes bundled third-party notices in the Node distribution. |

@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Migrate the native Android shell from Java to Kotlin (`MainActivity`,
+  `BootOverlay`, `HostKeepAliveService`, `RootfsInstaller`, bridges, provider
+  and storage helpers). Behavior, UI, intents and storage layout are unchanged;
+  the signed Kotlin build passes the 4/4 device E2E.
+
 ## 0.3.2 — 2026-11-10
 
 - Fix blank text/embedded-font PDF pages with a native Android `PdfRenderer`

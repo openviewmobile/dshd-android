@@ -1,0 +1,42 @@
+name: Diagnose Kotlin build
+
+on:
+  push:
+    paths:
+      - .github/workflows/diagnose-kotlin.yml
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android SDK
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses >/dev/null || true
+          "$SDKMANAGER" --install "platforms;android-35" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Capture build log
+        run: |
+          chmod +x app/gradlew
+          cd app
+          (./gradlew --no-daemon --stacktrace :app:assembleDebug > /tmp/build.log 2>&1; echo "exit=$?" >> /tmp/build.log) || true
+          tail -250 /tmp/build.log > build-diagnostic.txt
+      - name: Commit diagnostic to diag branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git checkout -B diag
+          git add build-diagnostic.txt
+          git commit -m 'ci: kotlin build diagnostic'
+          git push origin diag --force

@@ -8,7 +8,6 @@ import android.os.ParcelFileDescriptor
 import android.util.Base64
 import android.util.Log
 import android.webkit.JavascriptInterface
-
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -30,8 +29,9 @@ class PdfBridge(context: Context) {
     try {
       val bytes = Base64.decode(base64, Base64.DEFAULT)
       if (bytes.size < 5 || bytes[0].toInt() != '%'.code || bytes[1].toInt() != 'P'.code ||
-          bytes[2].toInt() != 'D'.code || bytes[3].toInt() != 'F'.code ||
-          bytes[4].toInt() != '-'.code) {
+        bytes[2].toInt() != 'D'.code || bytes[3].toInt() != 'F'.code ||
+        bytes[4].toInt() != '-'.code
+      ) {
         return ""
       }
       val dir = File(context.cacheDir, DIR)
@@ -60,7 +60,9 @@ class PdfBridge(context: Context) {
           if (pageIndex >= renderer.pageCount) return ""
           renderer.openPage(pageIndex).use { page ->
             val targetHeight = Math.max(
-                1, Math.round(targetWidth.toFloat() * page.height / page.width))
+              1,
+              Math.round(targetWidth.toFloat() * page.height / page.width)
+            )
             val bitmap = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888)
             bitmap.eraseColor(Color.WHITE)
             page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
@@ -68,7 +70,7 @@ class PdfBridge(context: Context) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, png)
             bitmap.recycle()
             return "data:image/png;base64," +
-                Base64.encodeToString(png.toByteArray(), Base64.NO_WRAP)
+              Base64.encodeToString(png.toByteArray(), Base64.NO_WRAP)
           }
         }
       }

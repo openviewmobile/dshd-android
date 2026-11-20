@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:BootOverlay.kt$BootOverlay$message.startsWith("Installing bundled rootfs") || message.startsWith("Updating bundled rootfs") || message.startsWith("Importing rootfs") || message.startsWith("Unpacking runtime") || message.startsWith("Finalizing rootfs")</ID>
+    <ID>ComplexCondition:MainActivity.kt$MainActivity.Companion$value.length &gt;= 2 &amp;&amp; ( (value.startsWith("\"") &amp;&amp; value.endsWith("\"")) || (value.startsWith("'") &amp;&amp; value.endsWith("'")) )</ID>
+    <ID>ComplexCondition:PdfBridge.kt$PdfBridge$bytes.size &lt; 5 || bytes[0].toInt() != '%'.code || bytes[1].toInt() != 'P'.code || bytes[2].toInt() != 'D'.code || bytes[3].toInt() != 'F'.code || bytes[4].toInt() != '-'.code</ID>
+    <ID>ComplexCondition:ProviderConfig.kt$ProviderConfig$value.length &gt;= 2 &amp;&amp; ( (value.startsWith("\"") &amp;&amp; value.endsWith("\"")) || (value.startsWith("'") &amp;&amp; value.endsWith("'")) )</ID>
+    <ID>ComplexCondition:RootfsInstaller.kt$RootfsInstaller$magicLength == 6 &amp;&amp; (magic[0].toInt() and 0xff) == 0xfd &amp;&amp; (magic[1].toInt() and 0xff) == 0x37 &amp;&amp; (magic[2].toInt() and 0xff) == 0x7a &amp;&amp; (magic[3].toInt() and 0xff) == 0x58 &amp;&amp; (magic[4].toInt() and 0xff) == 0x5a &amp;&amp; (magic[5].toInt() and 0xff) == 0x00</ID>
+    <ID>ComplexCondition:RootfsInstaller.kt$RootfsInstaller$normalized.isEmpty() || normalized == "." || normalized.startsWith("/") || normalized.contains("../") || normalized.endsWith("/..")</ID>
+    <ID>CyclomaticComplexMethod:RootfsInstaller.kt$RootfsInstaller$@Throws(Exception::class) fun install(raw: InputStream, rootfs: File, totalBytes: Long, progress: Progress?)</ID>
+    <ID>EmptyFunctionBlock:DeviceBridge.kt$DeviceBridge.&lt;no name provided&gt;${}</ID>
+    <ID>ImplicitDefaultLocale:RootfsInstaller.kt$RootfsInstaller$String.format( "%.1f / %.1f MB%s", received / 1048576.0, total / 1048576.0, if (resumed) " (resumed)" else "" )</ID>
+    <ID>ImplicitDefaultLocale:RootfsInstaller.kt$RootfsInstaller$String.format("%.1f MB", received / 1048576.0)</ID>
+    <ID>LargeClass:MainActivity.kt$MainActivity : Activity</ID>
+    <ID>LoopWithTooManyJumpStatements:DeviceBridge.kt$DeviceBridge$while</ID>
+    <ID>LoopWithTooManyJumpStatements:RootfsInstaller.kt$RootfsInstaller$while</ID>
+    <ID>MayBeConst:MainActivity.kt$MainActivity.Companion$val EXTRA_OPEN_PERMISSION = "openPermission"</ID>
+    <ID>NestedBlockDepth:DeviceBridge.kt$DeviceBridge$private fun contacts(query: String?, limit: String?): JSONObject</ID>
+    <ID>NestedBlockDepth:DeviceBridge.kt$DeviceBridge$private fun handleSocket(socket: Socket)</ID>
+    <ID>NestedBlockDepth:DeviceBridge.kt$DeviceBridge$private fun location(): JSONObject</ID>
+    <ID>NestedBlockDepth:HostKeepAliveService.kt$HostKeepAliveService$private fun prepareHook(runtimeDir: File)</ID>
+    <ID>NestedBlockDepth:HostKeepAliveService.kt$HostKeepAliveService$private fun readOutput()</ID>
+    <ID>NestedBlockDepth:MainActivity.kt$MainActivity$override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)</ID>
+    <ID>NestedBlockDepth:PdfBridge.kt$PdfBridge$@JavascriptInterface fun renderPdfPage(path: String?, pageIndex: Int, width: Int): String</ID>
+    <ID>NestedBlockDepth:RootfsInstaller.kt$RootfsInstaller$@Throws(Exception::class) fun download(url: String, expectedSha256: String?, destination: File, progress: Progress?)</ID>
+    <ID>NestedBlockDepth:RootfsInstaller.kt$RootfsInstaller$@Throws(Exception::class) fun install(raw: InputStream, rootfs: File, totalBytes: Long, progress: Progress?)</ID>
+    <ID>ReturnCount:BootOverlay.kt$BootOverlay$private fun hintFor(message: String): String</ID>
+    <ID>ReturnCount:BootOverlay.kt$BootOverlay$private fun humanize(message: String): String</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun bluetoothScan(seconds: Int): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun bluetoothStatus(): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun cachedLocation(): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun call(number: String?): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun contacts(query: String?, limit: String?): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun handle(method: String, target: String, body: ByteArray): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun handleSocket(socket: Socket)</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun location(): JSONObject</ID>
+    <ID>ReturnCount:DeviceBridge.kt$DeviceBridge$private fun notifyUser(title: String?, body: String?): JSONObject</ID>
+    <ID>ReturnCount:HostKeepAliveService.kt$HostKeepAliveService$override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity$override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?)</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity$override fun onRequestPermissionsResult( requestCode: Int, permissions: Array&lt;out String&gt;, grantResults: IntArray )</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity$private fun bundledRootfsLength(): Long</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity$private fun handleDebugDownload(intent: Intent?)</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity$private fun maybeRequestNotificationPermission()</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity$private fun readRootfsVersion(): String</ID>
+    <ID>ReturnCount:MainActivity.kt$MainActivity.&lt;no name provided&gt;$override fun onShowFileChooser( view: WebView?, callback: ValueCallback&lt;Array&lt;Uri&gt;&gt;?, params: WebChromeClient.FileChooserParams? ): Boolean</ID>
+    <ID>ReturnCount:PdfBridge.kt$PdfBridge$@JavascriptInterface fun renderPdfPage(path: String?, pageIndex: Int, width: Int): String</ID>
+    <ID>ReturnCount:PdfBridge.kt$PdfBridge$@JavascriptInterface fun storePdf(base64: String?): String</ID>
+    <ID>ReturnCount:ProviderConfig.kt$ProviderConfig$private fun readYamlValue(file: File, key: String): String</ID>
+    <ID>ReturnCount:RootfsInstaller.kt$RootfsInstaller$fun deleteTree(file: File?)</ID>
+    <ID>ReturnCount:RootfsInstaller.kt$RootfsInstaller$private fun parseNumber(block: ByteArray, offset: Int, length: Int): Long</ID>
+    <ID>ReturnCount:StorageConfig.kt$StorageConfig$fun describe(context: Context, mode: String?): String</ID>
+    <ID>ReturnCount:StorageConfig.kt$StorageConfig$fun removableDir(context: Context): File?</ID>
+    <ID>SwallowedException:DeviceBridge.kt$DeviceBridge$failure: JSONException</ID>
+    <ID>SwallowedException:MainActivity.kt$MainActivity$error: Exception</ID>
+    <ID>SwallowedException:ProviderConfig.kt$ProviderConfig$error: IOException</ID>
+    <ID>ThrowsCount:ProviderSecretStore.kt$ProviderSecretStore$@Throws(Exception::class) fun load(context: Context): String</ID>
+    <ID>ThrowsCount:RootfsInstaller.kt$RootfsInstaller$@Throws(Exception::class) fun download(url: String, expectedSha256: String?, destination: File, progress: Progress?)</ID>
+    <ID>ThrowsCount:RootfsInstaller.kt$RootfsInstaller$@Throws(Exception::class) fun install(raw: InputStream, rootfs: File, totalBytes: Long, progress: Progress?)</ID>
+    <ID>TooGenericExceptionCaught:DeviceBridge.kt$DeviceBridge$failure: Exception</ID>
+    <ID>TooGenericExceptionCaught:DeviceBridge.kt$DeviceBridge.Companion$failure: Exception</ID>
+    <ID>TooGenericExceptionCaught:HostKeepAliveService.kt$HostKeepAliveService$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:MainActivity.kt$MainActivity$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:MainActivity.kt$MainActivity.&lt;no name provided&gt;$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:PdfBridge.kt$PdfBridge$failure: Throwable</ID>
+    <ID>TooGenericExceptionCaught:RootfsInstaller.kt$RootfsInstaller$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:StorageConfig.kt$StorageConfig$error: RuntimeException</ID>
+    <ID>TooGenericExceptionThrown:ProviderSecretStore.kt$ProviderSecretStore$throw Exception("bad provider secret IV")</ID>
+    <ID>TooGenericExceptionThrown:ProviderSecretStore.kt$ProviderSecretStore$throw Exception("bad provider secret")</ID>
+    <ID>TooGenericExceptionThrown:ProviderSecretStore.kt$ProviderSecretStore$throw Exception("cannot write provider secret")</ID>
+    <ID>TooGenericExceptionThrown:ProviderSecretStore.kt$ProviderSecretStore$throw Exception("truncated provider secret")</ID>
+    <ID>TooManyFunctions:DevicePermissions.kt$DevicePermissions$Companion</ID>
+    <ID>TooManyFunctions:MainActivity.kt$MainActivity : Activity</ID>
+    <ID>TooManyFunctions:ProviderConfig.kt$ProviderConfig</ID>
+    <ID>TooManyFunctions:RootfsInstaller.kt$RootfsInstaller</ID>
+    <ID>UnusedParameter:DevicePermissions.kt$DevicePermissions.Companion$context: Context?</ID>
+    <ID>UnusedPrivateProperty:BootOverlay.kt$BootOverlay.Companion$private val BG = Color.rgb(5, 7, 15)</ID>
+    <ID>UseCheckOrError:MainActivity.kt$MainActivity$throw IllegalStateException("cannot open $uri")</ID>
+  </CurrentIssues>
+</SmellBaseline>

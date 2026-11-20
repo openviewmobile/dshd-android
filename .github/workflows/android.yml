@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build-apk:
-    name: Build lite APK
+    name: Build and test Kotlin APK
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -41,13 +41,17 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build lite APK from source
+      - name: Lint, test and build lite APK
         env:
           DSHD_EMBED_ROOTFS: none
         run: |
           chmod +x app/gradlew
           cd app
-          ./gradlew --no-daemon :app:assembleDebug
+          ./gradlew --no-daemon \
+            :app:ktlintCheck \
+            :app:detekt \
+            :app:testDebugUnitTest \
+            :app:assembleDebug
 
       - name: Generate checksums
         run: |

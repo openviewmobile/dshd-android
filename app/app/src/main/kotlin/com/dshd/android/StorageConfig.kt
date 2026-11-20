@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Environment
 import android.util.Log
-
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -26,20 +25,17 @@ object StorageConfig {
   const val MODE_INTERNAL = "internal"
   const val MODE_EXTERNAL = "external"
 
-  @JvmStatic
   fun mode(context: Context): String {
     val prefs: SharedPreferences = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
     return prefs.getString(KEY_MODE, MODE_INTERNAL) ?: MODE_INTERNAL
   }
 
-  @JvmStatic
   fun setMode(context: Context, mode: String?) {
     context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        .edit().putString(KEY_MODE, mode).apply()
+      .edit().putString(KEY_MODE, mode).apply()
   }
 
   /** Removable SD card app directory, or null when no card is mounted. */
-  @JvmStatic
   fun removableDir(context: Context): File? {
     val dirs = context.getExternalFilesDirs(null)
     if (dirs == null || dirs.size < 2 || dirs[1] == null) return null
@@ -53,13 +49,11 @@ object StorageConfig {
   }
 
   /** Emulated external app directory (shared storage, not necessarily an SD card). */
-  @JvmStatic
   fun externalDir(context: Context): File? {
     return context.getExternalFilesDir(null)
   }
 
   /** Directory that becomes the parent of the first dsh Workspace. */
-  @JvmStatic
   fun documentsDirectory(context: Context): File {
     var base: File?
     if (MODE_EXTERNAL == mode(context)) {
@@ -80,7 +74,6 @@ object StorageConfig {
   }
 
   /** Human-readable location for the storage picker. */
-  @JvmStatic
   fun describe(context: Context, mode: String?): String {
     if (MODE_EXTERNAL == mode) {
       val removable = removableDir(context)
@@ -91,7 +84,6 @@ object StorageConfig {
     return "Internal app storage"
   }
 
-  @JvmStatic
   fun currentLabel(context: Context): String {
     return if (MODE_EXTERNAL == mode(context)) "External" else "Internal"
   }
@@ -100,22 +92,23 @@ object StorageConfig {
    * Emits a dsh profile patch that moves first-use Workspace creation. Existing
    * registered Workspaces keep their paths and are never moved implicitly.
    */
-  @JvmStatic
   @Throws(IOException::class)
   fun writePatch(context: Context, runtime: File): File {
     val patch = File(runtime, "workspace-storage.yml")
     val path = quote(documentsDirectory(context).absolutePath)
     var yaml = "" +
-        "- id: \"workspace-controller\"\n" +
-        "  config:\n" +
-        "    documentsDirectory: " + path + "\n"
-    val plugin = File(File(context.filesDir, "rootfs"),
-        "opt/node24/lib/node_modules/@deepseek-ai/dsh/node_modules/"
-            + "@deepseek-ai/dsh-android-bridge/lib/index.js")
+      "- id: \"workspace-controller\"\n" +
+      "  config:\n" +
+      "    documentsDirectory: " + path + "\n"
+    val plugin = File(
+      File(context.filesDir, "rootfs"),
+      "opt/node24/lib/node_modules/@deepseek-ai/dsh/node_modules/" +
+        "@deepseek-ai/dsh-android-bridge/lib/index.js"
+    )
     if (plugin.isFile) {
       yaml += "- insert:\n" +
-          "    - id: \"android-bridge\"\n" +
-          "      name: " + quote(plugin.absolutePath) + "\n"
+        "    - id: \"android-bridge\"\n" +
+        "      name: " + quote(plugin.absolutePath) + "\n"
     } else {
       Log.w(TAG, "Android bridge plugin is missing at " + plugin)
     }

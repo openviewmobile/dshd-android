@@ -1,0 +1,15 @@
+build:
+  maxIssues: 0
+
+complexity:
+  LongMethod:
+    threshold: 250
+  TooManyFunctions:
+    thresholdInFiles: 40
+    thresholdInClasses: 40
+  CyclomaticComplexMethod:
+    threshold: 30
+
+style:
+  MagicNumber:
+    active: false

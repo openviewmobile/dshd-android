@@ -9,7 +9,6 @@ import java.io.FileOutputStream
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import java.security.KeyStore
-
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
@@ -21,12 +20,10 @@ object ProviderSecretStore {
   private const val FILE = "provider-key.enc"
   private const val VERSION: Byte = 1
 
-  @JvmStatic
   fun has(context: Context): Boolean {
     return File(context.filesDir, FILE).isFile
   }
 
-  @JvmStatic
   @Throws(Exception::class)
   fun save(context: Context, secret: String) {
     val cipher = Cipher.getInstance("AES/GCM/NoPadding")
@@ -51,7 +48,6 @@ object ProviderSecretStore {
     }
   }
 
-  @JvmStatic
   @Throws(Exception::class)
   fun load(context: Context): String {
     val file = File(context.filesDir, FILE)
@@ -85,13 +81,19 @@ object ProviderSecretStore {
     store.load(null as KeyStore.LoadStoreParameter?)
     if (!store.containsAlias(ALIAS)) {
       val generator = KeyGenerator.getInstance(
-          KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-      generator.init(KeyGenParameterSpec.Builder(ALIAS,
-          KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+        KeyProperties.KEY_ALGORITHM_AES,
+        "AndroidKeyStore"
+      )
+      generator.init(
+        KeyGenParameterSpec.Builder(
+          ALIAS,
+          KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+        )
           .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
           .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
           .setKeySize(256)
-          .build())
+          .build()
+      )
       generator.generateKey()
     }
     return store.getKey(ALIAS, null) as SecretKey

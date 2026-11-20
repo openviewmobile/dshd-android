@@ -29,7 +29,9 @@ class HostKeepAliveService : Service() {
   private var outputThread: Thread? = null
   private var currentUrl: String? = null
   private var lastMessage = ""
+
   @Volatile private var starting = false
+
   @Volatile private var stopping = false
   private var consecutiveFailures = 0
   private var hostStartedAt = 0L
@@ -39,7 +41,8 @@ class HostKeepAliveService : Service() {
     val manager = getSystemService(NotificationManager::class.java)!!
     if (manager.getNotificationChannel(CHANNEL) == null) {
       manager.createNotificationChannel(
-          NotificationChannel(CHANNEL, "dsh Host", NotificationManager.IMPORTANCE_LOW))
+        NotificationChannel(CHANNEL, "dsh Host", NotificationManager.IMPORTANCE_LOW)
+      )
     }
     startForeground(NOTIFICATION_ID, notification("Starting local dsh Host…", false))
     if (RootfsInstaller.isReady(File(filesDir, ROOTFS_NAME))) {
@@ -96,10 +99,11 @@ class HostKeepAliveService : Service() {
         home.mkdirs()
         tmp.mkdirs()
         val libPath = listOf(
-            File(rootfs, "lib/aarch64-linux-gnu").absolutePath,
-            File(rootfs, "usr/lib/aarch64-linux-gnu").absolutePath,
-            File(rootfs, "lib").absolutePath,
-            File(rootfs, "usr/lib").absolutePath).joinToString(":")
+          File(rootfs, "lib/aarch64-linux-gnu").absolutePath,
+          File(rootfs, "usr/lib/aarch64-linux-gnu").absolutePath,
+          File(rootfs, "lib").absolutePath,
+          File(rootfs, "usr/lib").absolutePath
+        ).joinToString(":")
         val command = mutableListOf<String>()
         command.add(loader.absolutePath)
         command.add("--library-path")
@@ -127,7 +131,7 @@ class HostKeepAliveService : Service() {
         // default and approval policy consistent with full access.
         env["DSH_PERMISSION_MODE"] = "danger-full-access"
         env["PATH"] = "/opt/node24/bin:/opt/node24/lib/node_modules/.bin:" +
-            "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+          "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
         val providerKey = ProviderSecretStore.load(this)
         if (providerKey.isNotEmpty()) env[ProviderConfig.PROVIDER_ENV] = providerKey
         Log.i(TAG, "starting service host: " + command.joinToString(" "))
@@ -151,7 +155,8 @@ class HostKeepAliveService : Service() {
     try {
       val process = hostProcess!!
       BufferedReader(
-          InputStreamReader(process.inputStream, StandardCharsets.UTF_8)).use { reader ->
+        InputStreamReader(process.inputStream, StandardCharsets.UTF_8)
+      ).use { reader ->
         var line = reader.readLine()
         while (line != null) {
           Log.i(TAG, "host: $line")
@@ -223,26 +228,38 @@ class HostKeepAliveService : Service() {
 
   private fun notification(text: String, ready: Boolean): Notification {
     val open = Intent(this, MainActivity::class.java)
-        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+      .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
     val openIntent = PendingIntent.getActivity(
-        this, 0, open, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+      this,
+      0,
+      open,
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
     val stopIntent = PendingIntent.getService(
-        this, 1, Intent(this, HostKeepAliveService::class.java).setAction(ACTION_STOP),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+      this,
+      1,
+      Intent(this, HostKeepAliveService::class.java).setAction(ACTION_STOP),
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
     return Notification.Builder(this, CHANNEL)
-        .setContentTitle(if (ready) "dsh is running" else "dsh Host")
-        .setContentText(text)
-        .setSmallIcon(android.R.drawable.stat_sys_download_done)
-        .setContentIntent(openIntent)
-        .addAction(Notification.Action.Builder(
-            null as Icon?, "Stop", stopIntent).build())
-        .setOngoing(true)
-        .build()
+      .setContentTitle(if (ready) "dsh is running" else "dsh Host")
+      .setContentText(text)
+      .setSmallIcon(android.R.drawable.stat_sys_download_done)
+      .setContentIntent(openIntent)
+      .addAction(
+        Notification.Action.Builder(
+          null as Icon?,
+          "Stop",
+          stopIntent
+        ).build()
+      )
+      .setOngoing(true)
+      .build()
   }
 
   private fun updateNotification(text: String, ready: Boolean) {
     getSystemService(NotificationManager::class.java)!!
-        .notify(NOTIFICATION_ID, notification(text, ready))
+      .notify(NOTIFICATION_ID, notification(text, ready))
   }
 
   private fun findFreePort(): Int {

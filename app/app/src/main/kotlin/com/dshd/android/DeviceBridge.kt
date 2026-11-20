@@ -22,11 +22,6 @@ import android.os.Looper
 import android.provider.ContactsContract
 import android.system.Os
 import android.util.Log
-
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -50,6 +45,9 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import java.util.regex.Pattern
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 
 /**
  * Loopback HTTP bridge between the Linux dsh Host and Android runtime APIs.
@@ -67,6 +65,7 @@ class DeviceBridge private constructor(context: Context) {
   private var acceptThread: Thread? = null
   private var token: String? = null
   private var port = 0
+
   @Volatile
   private var running = false
   private var credentialsFile: File? = null
@@ -150,7 +149,7 @@ class DeviceBridge private constructor(context: Context) {
           val colon = line.indexOf(':')
           if (colon > 0) {
             headers[line.substring(0, colon).trim { it <= ' ' }.lowercase(Locale.US)] =
-                line.substring(colon + 1).trim { it <= ' ' }
+              line.substring(colon + 1).trim { it <= ' ' }
           }
         }
         var length = 0
@@ -160,8 +159,10 @@ class DeviceBridge private constructor(context: Context) {
         }
         if (length < 0 || length > 64 * 1024) {
           write(
-              connection.getOutputStream(), 413,
-              error("payload_too_large", "Request body is too large."))
+            connection.getOutputStream(),
+            413,
+            error("payload_too_large", "Request body is too large.")
+          )
           return
         }
         val body = readBody(input, length)
@@ -172,10 +173,14 @@ class DeviceBridge private constructor(context: Context) {
         }
         if (supplied == null || !MessageDigest.isEqual(
             token!!.toByteArray(StandardCharsets.UTF_8),
-            supplied.toByteArray(StandardCharsets.UTF_8))) {
+            supplied.toByteArray(StandardCharsets.UTF_8)
+          )
+        ) {
           write(
-              connection.getOutputStream(), 401,
-              error("unauthorized", "Missing or invalid bridge token."))
+            connection.getOutputStream(),
+            401,
+            error("unauthorized", "Missing or invalid bridge token.")
+          )
           return
         }
         val result = handle(method, target, body)
@@ -245,15 +250,16 @@ class DeviceBridge private constructor(context: Context) {
   private fun openPermission(name: String): JSONObject {
     try {
       val intent = Intent(context, MainActivity::class.java)
-          .putExtra(MainActivity.EXTRA_OPEN_PERMISSION, name)
-          .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        .putExtra(MainActivity.EXTRA_OPEN_PERMISSION, name)
+        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
       context.startActivity(intent)
       return ok().put("opened", true).put("permission", name)
-          .put("message", "Permission center opened on the phone. The user must grant it.")
+        .put("message", "Permission center opened on the phone. The user must grant it.")
     } catch (failure: Exception) {
       return error(
-          "cannot_open_activity",
-          "Android blocked opening the permission center; open DSHD manually. " + failure)
+        "cannot_open_activity",
+        "Android blocked opening the permission center; open DSHD manually. " + failure
+      )
     }
   }
 
@@ -326,7 +332,7 @@ class DeviceBridge private constructor(context: Context) {
       out.put("timestamp", fix.time)
       out.put("stale", false)
       context.getSharedPreferences("dshd_location", Context.MODE_PRIVATE).edit()
-          .putString("last", out.toString()).apply()
+        .putString("last", out.toString()).apply()
       return out
     } catch (failure: JSONException) {
       return error("location_error", failure.toString())
@@ -336,7 +342,7 @@ class DeviceBridge private constructor(context: Context) {
   /** Never turn a stale fix into a silent current position; mark it explicitly. */
   private fun cachedLocation(): JSONObject {
     val raw: String = context.getSharedPreferences("dshd_location", Context.MODE_PRIVATE)
-        .getString("last", "")!!
+      .getString("last", "")!!
     if (raw.isEmpty()) {
       return error("location_timeout", "No location fix within 18 seconds.")
     }
@@ -353,7 +359,12 @@ class DeviceBridge private constructor(context: Context) {
   private fun bluetoothStatus(): JSONObject {
     val manager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
     val adapter = manager?.adapter
-    if (adapter == null) return error("bluetooth_unavailable", "This device has no Bluetooth adapter.")
+    if (adapter == null) {
+      return error(
+        "bluetooth_unavailable",
+        "This device has no Bluetooth adapter."
+      )
+    }
     if (!DevicePermissions.isGranted(context, DevicePermissions.BLUETOOTH)) {
       return permission("Bluetooth permission is not granted.")
     }
@@ -362,8 +373,9 @@ class DeviceBridge private constructor(context: Context) {
       out.put("available", true)
       out.put("enabled", adapter.isEnabled)
       if (Build.VERSION.SDK_INT < 31 ||
-          context.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) ==
-          PackageManager.PERMISSION_GRANTED) {
+        context.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) ==
+        PackageManager.PERMISSION_GRANTED
+      ) {
         out.put("name", adapter.name ?: "")
         val bonded = JSONArray()
         for (device in adapter.bondedDevices) {
@@ -387,15 +399,21 @@ class DeviceBridge private constructor(context: Context) {
     }
     if (!DevicePermissions.bluetoothScanGranted(context)) {
       return permission(
-          if (Build.VERSION.SDK_INT >= 31) {
-            "Bluetooth scan permission is not granted."
-          } else {
-            "Location permission is required to scan Bluetooth on Android 11 and older."
-          })
+        if (Build.VERSION.SDK_INT >= 31) {
+          "Bluetooth scan permission is not granted."
+        } else {
+          "Location permission is required to scan Bluetooth on Android 11 and older."
+        }
+      )
     }
     val manager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager?
     val adapter = manager?.adapter
-    if (adapter == null) return error("bluetooth_unavailable", "This device has no Bluetooth adapter.")
+    if (adapter == null) {
+      return error(
+        "bluetooth_unavailable",
+        "This device has no Bluetooth adapter."
+      )
+    }
     if (!adapter.isEnabled) return error("bluetooth_disabled", "Bluetooth is turned off.")
     val scanner: BluetoothLeScanner? = try {
       adapter.bluetoothLeScanner
@@ -444,7 +462,9 @@ class DeviceBridge private constructor(context: Context) {
     }
     if (scanError.get() >= 0) {
       return error(
-          "bluetooth_scan_failed", "BLE scan failed with code " + scanError.get() + ".")
+        "bluetooth_scan_failed",
+        "BLE scan failed with code " + scanError.get() + "."
+      )
     }
     val devices = JSONArray()
     synchronized(found) {
@@ -465,17 +485,21 @@ class DeviceBridge private constructor(context: Context) {
     } catch (ignored: NumberFormatException) {
     }
     val projection = arrayOf(
-        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-        ContactsContract.CommonDataKinds.Phone.NUMBER)
+      ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+      ContactsContract.CommonDataKinds.Phone.NUMBER
+    )
     val selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " LIKE ? OR " +
-        ContactsContract.CommonDataKinds.Phone.NUMBER + " LIKE ?"
+      ContactsContract.CommonDataKinds.Phone.NUMBER + " LIKE ?"
     val args = arrayOf("%" + text + "%", "%" + text + "%")
     val rows = JSONArray()
     try {
       context.contentResolver.query(
-          ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-          projection, selection, args,
-          ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")?.use { cursor ->
+        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+        projection,
+        selection,
+        args,
+        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+      )?.use { cursor ->
         while (cursor.moveToNext() && rows.length() < max) {
           val name = cursor.getString(0)
           val number = cursor.getString(1)
@@ -504,8 +528,9 @@ class DeviceBridge private constructor(context: Context) {
     }
     if (!PHONE.matcher(trimmed).matches() || digits < 3) {
       return error(
-          "invalid_number",
-          "Expected a phone number with at least 3 digits, spaces, +, - or ().")
+        "invalid_number",
+        "Expected a phone number with at least 3 digits, spaces, +, - or ()."
+      )
     }
     synchronized(LOCK) {
       val now = System.currentTimeMillis()
@@ -521,36 +546,51 @@ class DeviceBridge private constructor(context: Context) {
       return ok().put("number", trimmed).put("action", "call")
     } catch (failure: Exception) {
       return error(
-          "call_failed",
-          "Android blocked the call. Unlock the phone and try again. " + failure)
+        "call_failed",
+        "Android blocked the call. Unlock the phone and try again. " + failure
+      )
     }
   }
 
   private fun notifyUser(title: String?, body: String?): JSONObject {
     if (Build.VERSION.SDK_INT >= 33 &&
-        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
-        PackageManager.PERMISSION_GRANTED) {
+      context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
+      PackageManager.PERMISSION_GRANTED
+    ) {
       return permission("Notification permission is not granted.")
     }
     val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-    if (manager == null) return error("notifications_unavailable", "Notification service is unavailable.")
+    if (manager == null) {
+      return error(
+        "notifications_unavailable",
+        "Notification service is unavailable."
+      )
+    }
     if (Build.VERSION.SDK_INT >= 26 && manager.getNotificationChannel(CHANNEL) == null) {
-      manager.createNotificationChannel(NotificationChannel(
-          CHANNEL, "DSHD agent", NotificationManager.IMPORTANCE_DEFAULT))
+      manager.createNotificationChannel(
+        NotificationChannel(
+          CHANNEL,
+          "DSHD agent",
+          NotificationManager.IMPORTANCE_DEFAULT
+        )
+      )
     }
     val open = Intent(context, MainActivity::class.java)
-        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+      .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
     val pending = PendingIntent.getActivity(
-        context, 0, open,
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+      context,
+      0,
+      open,
+      PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
     val notification = Notification.Builder(context, CHANNEL)
-        .setSmallIcon(android.R.drawable.ic_dialog_info)
-        .setContentTitle(if (title == null || title.isEmpty()) "DSHD" else title)
-        .setContentText(body ?: "")
-        .setStyle(Notification.BigTextStyle().bigText(body ?: ""))
-        .setContentIntent(pending)
-        .setAutoCancel(true)
-        .build()
+      .setSmallIcon(android.R.drawable.ic_dialog_info)
+      .setContentTitle(if (title == null || title.isEmpty()) "DSHD" else title)
+      .setContentText(body ?: "")
+      .setStyle(Notification.BigTextStyle().bigText(body ?: ""))
+      .setContentIntent(pending)
+      .setAutoCancel(true)
+      .build()
     manager.notify((System.currentTimeMillis() % Integer.MAX_VALUE).toInt(), notification)
     return ok().put("notified", true)
   }
@@ -568,7 +608,6 @@ class DeviceBridge private constructor(context: Context) {
     private var instance: DeviceBridge? = null
     private var lastCallAt: Long = 0
 
-    @JvmStatic
     fun start(context: Context) {
       synchronized(LOCK) {
         if (instance != null) return
@@ -584,7 +623,6 @@ class DeviceBridge private constructor(context: Context) {
       }
     }
 
-    @JvmStatic
     fun stop() {
       synchronized(LOCK) {
         val bridge = instance ?: return
@@ -657,9 +695,9 @@ class DeviceBridge private constructor(context: Context) {
     private fun write(output: OutputStream, status: Int, body: JSONObject) {
       val bytes = body.toString().toByteArray(StandardCharsets.UTF_8)
       val head = "HTTP/1.1 " + status + " " + (if (status == 200) "OK" else "Error") + "\r\n" +
-          "Content-Type: application/json; charset=utf-8\r\n" +
-          "Content-Length: " + bytes.size + "\r\n" +
-          "Connection: close\r\n\r\n"
+        "Content-Type: application/json; charset=utf-8\r\n" +
+        "Content-Length: " + bytes.size + "\r\n" +
+        "Connection: close\r\n\r\n"
       output.write(head.toByteArray(StandardCharsets.UTF_8))
       output.write(bytes)
       output.flush()

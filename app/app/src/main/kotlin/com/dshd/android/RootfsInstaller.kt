@@ -4,7 +4,6 @@ import android.system.ErrnoException
 import android.system.Os
 import android.system.OsConstants
 import android.system.StructStat
-import org.tukaani.xz.XZInputStream
 import java.io.BufferedInputStream
 import java.io.EOFException
 import java.io.File
@@ -19,6 +18,7 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.util.HashMap
 import java.util.zip.GZIPInputStream
+import org.tukaani.xz.XZInputStream
 
 /**
  * First-run rootfs importer.
@@ -36,18 +36,17 @@ object RootfsInstaller {
 
   private const val BLOCK = 512
 
-  @JvmStatic
   fun isReady(rootfs: File): Boolean {
     return File(rootfs, "lib/ld-linux-aarch64.so.1").isFile &&
-        File(rootfs, "opt/node24/bin/node").isFile &&
-        File(rootfs,
-            "opt/node24/lib/node_modules/@deepseek-ai/dsh/lib/bin.js").isFile
+      File(rootfs, "opt/node24/bin/node").isFile &&
+      File(
+        rootfs,
+        "opt/node24/lib/node_modules/@deepseek-ai/dsh/lib/bin.js"
+      ).isFile
   }
 
-  @JvmStatic
   @Throws(Exception::class)
-  fun download(url: String, expectedSha256: String?, destination: File,
-      progress: Progress?) {
+  fun download(url: String, expectedSha256: String?, destination: File, progress: Progress?) {
     val part = File(destination.parentFile, destination.name + ".part")
     var existing = if (part.isFile) part.length() else 0L
     val connection = URL(url).openConnection() as HttpURLConnection
@@ -65,7 +64,8 @@ object RootfsInstaller {
       // The partial file may already be complete. Verify it before giving up.
       val digest = sha256(part)
       if (expectedSha256 != null && expectedSha256.isNotEmpty() &&
-          digest.equals(expectedSha256.trim(), ignoreCase = true)) {
+        digest.equals(expectedSha256.trim(), ignoreCase = true)
+      ) {
         replace(part, destination)
         progress?.onProgress("Download complete ($digest)", 100)
         return
@@ -103,8 +103,12 @@ object RootfsInstaller {
             if (progress != null && received / (4L * 1024 * 1024) != lastReport) {
               lastReport = received / (4L * 1024 * 1024)
               val size = if (total > 0) {
-                String.format("%.1f / %.1f MB%s", received / 1048576.0,
-                    total / 1048576.0, if (resumed) " (resumed)" else "")
+                String.format(
+                  "%.1f / %.1f MB%s",
+                  received / 1048576.0,
+                  total / 1048576.0,
+                  if (resumed) " (resumed)" else ""
+                )
               } else {
                 String.format("%.1f MB", received / 1048576.0)
               }
@@ -124,7 +128,8 @@ object RootfsInstaller {
     }
     val actual = hex(digest.digest())
     if (expectedSha256 != null && expectedSha256.isNotEmpty() &&
-        !actual.equals(expectedSha256.trim(), ignoreCase = true)) {
+      !actual.equals(expectedSha256.trim(), ignoreCase = true)
+    ) {
       part.delete()
       destination.delete()
       throw IOException("rootfs SHA-256 mismatch: expected $expectedSha256, got $actual")
@@ -155,13 +160,11 @@ object RootfsInstaller {
     }
   }
 
-  @JvmStatic
   @Throws(Exception::class)
   fun install(raw: InputStream, rootfs: File, progress: Progress?) {
     install(raw, rootfs, -1L, progress)
   }
 
-  @JvmStatic
   @Throws(Exception::class)
   fun install(raw: InputStream, rootfs: File, totalBytes: Long, progress: Progress?) {
     val parent = rootfs.parentFile
@@ -170,8 +173,10 @@ object RootfsInstaller {
     }
     // A unique staging name avoids a stale, partially-deleted importing tree
     // blocking every retry on filesystems that keep empty/symlink skeletons.
-    val temp = File(parent,
-        rootfs.name + ".importing." + System.currentTimeMillis())
+    val temp = File(
+      parent,
+      rootfs.name + ".importing." + System.currentTimeMillis()
+    )
     if (!temp.mkdirs()) throw IOException("cannot create $temp")
 
     val counted = CountingInputStream(raw)
@@ -182,12 +187,14 @@ object RootfsInstaller {
     buffered.reset()
     val archive: InputStream
     if (magicLength >= 2 && (magic[0].toInt() and 0xff) == 0x1f &&
-        (magic[1].toInt() and 0xff) == 0x8b) {
+      (magic[1].toInt() and 0xff) == 0x8b
+    ) {
       archive = GZIPInputStream(buffered, 1 shl 16)
     } else if (magicLength == 6 &&
-        (magic[0].toInt() and 0xff) == 0xfd && (magic[1].toInt() and 0xff) == 0x37 &&
-        (magic[2].toInt() and 0xff) == 0x7a && (magic[3].toInt() and 0xff) == 0x58 &&
-        (magic[4].toInt() and 0xff) == 0x5a && (magic[5].toInt() and 0xff) == 0x00) {
+      (magic[0].toInt() and 0xff) == 0xfd && (magic[1].toInt() and 0xff) == 0x37 &&
+      (magic[2].toInt() and 0xff) == 0x7a && (magic[3].toInt() and 0xff) == 0x58 &&
+      (magic[4].toInt() and 0xff) == 0x5a && (magic[5].toInt() and 0xff) == 0x00
+    ) {
       archive = XZInputStream(buffered)
     } else {
       archive = buffered
@@ -298,8 +305,13 @@ object RootfsInstaller {
         if (progress != null && (entries % 250 == 0 || percent != lastPercent)) {
           lastPercent = percent
           progress.onProgress(
-              if (percent >= 0) "Unpacking runtime… $percent%"
-              else "Importing rootfs… $entries entries", percent)
+            if (percent >= 0) {
+              "Unpacking runtime… $percent%"
+            } else {
+              "Importing rootfs… $entries entries"
+            },
+            percent
+          )
         }
       }
     } finally {
@@ -350,7 +362,6 @@ object RootfsInstaller {
     }
   }
 
-  @JvmStatic
   fun deleteTree(file: File?) {
     if (file == null) return
     var exists = false
@@ -388,7 +399,8 @@ object RootfsInstaller {
     var normalized = name.replace('\\', '/')
     while (normalized.startsWith("./")) normalized = normalized.substring(2)
     if (normalized.isEmpty() || normalized == "." || normalized.startsWith("/") ||
-        normalized.contains("../") || normalized.endsWith("/..")) {
+      normalized.contains("../") || normalized.endsWith("/..")
+    ) {
       return null
     }
     return File(root, normalized)
@@ -500,7 +512,6 @@ object RootfsInstaller {
     }
   }
 
-  @JvmStatic
   @Throws(IOException::class)
   fun copyTree(source: File?, target: File) {
     if (source == null || !source.exists()) return
@@ -524,7 +535,6 @@ object RootfsInstaller {
     }
   }
 
-  @JvmStatic
   @Throws(IOException::class)
   fun copyFile(source: File, target: File) {
     FileInputStream(source).use { input ->

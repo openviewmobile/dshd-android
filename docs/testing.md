@@ -9,7 +9,6 @@
 ## Kotlin 静态检查与单元测试
 
 ```bash
-cd app
 ./gradlew ktlintCheck detekt testDebugUnitTest
 ```
 

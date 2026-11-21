@@ -20,4 +20,4 @@ pack-rootfs:
 	scripts/pack-rootfs.sh "$(PACK_ROOTFS)" dist/dshd-rootfs-arm64.tar.gz
 
 clean:
-	rm -rf app/build app/app/build
+	rm -rf app/build build

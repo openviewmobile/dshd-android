@@ -3,7 +3,7 @@
 # source of truth so the APK and the served frontend stay in sync.
 set -euo pipefail
 ROOT="${1:?usage: patch-rootfs-webview.sh <rootfs-dir>}"
-ASSET="$(cd "$(dirname "$0")/.." && pwd)/app/app/src/main/assets/dsh-index.html"
+ASSET="$(cd "$(dirname "$0")/.." && pwd)/app/src/main/assets/dsh-index.html"
 TARGET="$ROOT/opt/node24/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-web-frontend/dist/index.html"
 [ -f "$TARGET" ] || { echo "missing $TARGET" >&2; exit 1; }
 python3 - "$ASSET" "$TARGET" <<'PY'

@@ -45,8 +45,7 @@ jobs:
         env:
           DSHD_EMBED_ROOTFS: none
         run: |
-          chmod +x app/gradlew
-          cd app
+          chmod +x gradlew
           ./gradlew --no-daemon \
             :app:ktlintCheck \
             :app:detekt \
@@ -55,7 +54,7 @@ jobs:
 
       - name: Generate checksums
         run: |
-          cd app/app/build/outputs/apk/debug
+          cd app/build/outputs/apk/debug
           sha256sum app-debug.apk > SHA256SUMS
           cat SHA256SUMS
 
@@ -64,7 +63,7 @@ jobs:
         with:
           name: dshd-android-debug-${{ github.sha }}
           path: |
-            app/app/build/outputs/apk/debug/app-debug.apk
-            app/app/build/outputs/apk/debug/SHA256SUMS
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/debug/SHA256SUMS
           if-no-files-found: error
           retention-days: 14

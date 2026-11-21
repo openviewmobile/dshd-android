@@ -51,12 +51,11 @@ jobs:
         env:
           DSHD_EMBED_ROOTFS: ${{ runner.temp }}/rootfs.tar.xz
         run: |
-          chmod +x app/gradlew
-          cd app
+          chmod +x gradlew
           ./gradlew --no-daemon :app:assembleDebug
       - name: Checksums
         run: |
-          APK=app/app/build/outputs/apk/debug/app-debug.apk
+          APK=app/build/outputs/apk/debug/app-debug.apk
           sha256sum "$APK" > "$APK.sha256"
           ls -lh "$APK"
           cat "$APK.sha256"
@@ -65,7 +64,7 @@ jobs:
         with:
           name: dshd-android-full-debug-${{ github.sha }}
           path: |
-            app/app/build/outputs/apk/debug/app-debug.apk
-            app/app/build/outputs/apk/debug/app-debug.apk.sha256
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/debug/app-debug.apk.sha256
           if-no-files-found: error
           retention-days: 30

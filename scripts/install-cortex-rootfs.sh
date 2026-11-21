@@ -5,7 +5,7 @@
 # device testing on a rooted phone.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-ASSETS="$HERE/app/app/src/main/assets"
+ASSETS="$HERE/app/src/main/assets"
 PKG=com.dshd.android
 SRC=/data/data/org.cortex.terminal/files/cortex
 DST=/data/data/$PKG/files/rootfs

@@ -1,8 +1,10 @@
 dist/
 runtime/
-app/.gradle/
+.gradle/
+.kotlin/
+build/
 app/build/
-app/app/build/
+app/.kotlin/
 *.jks
 *.keystore
 *.password
@@ -16,3 +18,5 @@ demo/out/
 demo/audio/
 demo/youtube/frames/
 demo/youtube/out/
+
+.DS_Store

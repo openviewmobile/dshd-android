@@ -15,9 +15,9 @@ if [ -n "${DSHD_ROOTFS_URL:-}" ] || [ -n "${DSHD_ROOTFS_SHA256:-}" ]; then
   esac
 fi
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-cd "$ROOT/app"
-if [ -z "${GRADLE:-}" ] && [ -x "$ROOT/app/gradlew" ]; then
-  GRADLE="$ROOT/app/gradlew"
+cd "$ROOT"
+if [ -z "${GRADLE:-}" ] && [ -x "$ROOT/gradlew" ]; then
+  GRADLE="$ROOT/gradlew"
 fi
 GRADLE="${GRADLE:-$(find "$HOME/.gradle/wrapper/dists" -type f -path '*/bin/gradle' 2>/dev/null | head -1)}"
 if [ -z "$GRADLE" ]; then
@@ -29,6 +29,6 @@ if [ -z "${DSHD_KEYSTORE:-}" ]; then
   exit 2
 fi
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}" "$GRADLE" --no-daemon :app:assembleRelease
-APK="$ROOT/app/app/build/outputs/apk/release/app-release.apk"
+APK="$ROOT/app/build/outputs/apk/release/app-release.apk"
 cp "$APK" "$ROOT/dist/dshd-android-release.apk"
 echo "$ROOT/dist/dshd-android-release.apk"

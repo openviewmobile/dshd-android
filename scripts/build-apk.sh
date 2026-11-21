@@ -2,9 +2,9 @@
 # Build the debug APK. Requires an Android SDK and a Gradle 8+/9 distribution.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
-cd "$HERE/app"
-if [ -z "${GRADLE:-}" ] && [ -x "$HERE/app/gradlew" ]; then
-  GRADLE="$HERE/app/gradlew"
+cd "$HERE"
+if [ -z "${GRADLE:-}" ] && [ -x "$HERE/gradlew" ]; then
+  GRADLE="$HERE/gradlew"
 fi
 GRADLE="${GRADLE:-$(find "$HOME/.gradle/wrapper/dists" -type f -path '*/bin/gradle' 2>/dev/null | head -1)}"
 if [ -z "$GRADLE" ]; then

@@ -7,7 +7,7 @@
     "audio": "python3 build_audio.py"
   },
   "dependencies": {
-    "playwright-core": "1.65.0",
+    "playwright-core": "1.65.1",
     "three": "0.187.0"
   }
 }

@@ -6,6 +6,8 @@
   `BootOverlay`, `HostKeepAliveService`, `RootfsInstaller`, bridges, provider
   and storage helpers). Behavior, UI, intents and storage layout are unchanged;
   the signed Kotlin build passes the 4/4 device E2E.
+- Kotlin DSL + version catalog, `jvmToolchain(17)`, ktlint, detekt and
+  `testDebugUnitTest`; CI runs all of them before building the APK.
 
 ## 0.3.2 — 2026-11-10
 

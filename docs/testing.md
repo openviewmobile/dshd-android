@@ -6,6 +6,16 @@
 - 已安装 `com.dshd.android`，rootfs 已就绪（内置版首次启动会自动解包），Provider 已配置并可用；
 - `adb` 可访问设备；Node.js >= 22（E2E 需要全局 `fetch`/`WebSocket`）。
 
+## Kotlin 静态检查与单元测试
+
+```bash
+cd app
+./gradlew ktlintCheck detekt testDebugUnitTest
+```
+
+源码位于 `app/src/main/kotlin`，构建脚本为 Kotlin DSL，依赖版本由
+`gradle/libs.versions.toml` 管理。`detekt` 使用仓库基线，只拦截新增问题。
+
 ## 自动化 E2E
 
 ```bash

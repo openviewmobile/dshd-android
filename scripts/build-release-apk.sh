@@ -30,5 +30,6 @@ if [ -z "${DSHD_KEYSTORE:-}" ]; then
 fi
 ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}" "$GRADLE" --no-daemon :app:assembleRelease
 APK="$ROOT/app/build/outputs/apk/release/app-release.apk"
+mkdir -p "$ROOT/dist"
 cp "$APK" "$ROOT/dist/dshd-android-release.apk"
 echo "$ROOT/dist/dshd-android-release.apk"

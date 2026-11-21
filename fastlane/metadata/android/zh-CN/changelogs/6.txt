@@ -1,0 +1,5 @@
+0.3.3：标准 Kotlin 重建。
+- 原生外壳迁移到 Kotlin。
+- 标准 Android 工程布局和 Kotlin DSL。
+- CI 增加 ktlint、detekt 和单元测试。
+- 正式 APK 由 GitHub Actions 构建并签名。

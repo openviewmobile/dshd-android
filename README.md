@@ -2,8 +2,8 @@
 
 **DeepSeek Harness Desktop — a real AI workstation on your Android phone.**
 
-[**Download the current APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.3/dshd-android-release.apk) ·
-[Install guide](#install) · [Screenshots](#screenshots) · [中文](README.zh.md)
+[**Download the current APK**](https://github.com/openviewmobile/dshd-android/releases/latest/download/dshd-android-release.apk) ·
+[Install guide](#install) · [Screenshots](#screenshots) · [Distribution](docs/distribution.md) · [中文](README.zh.md)
 
 [![Android APK](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml/badge.svg)](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml)
 ![Android 9+](https://img.shields.io/badge/Android-9%2B-3DDC84)
@@ -17,9 +17,9 @@ no separate Linux installer.
 > **Current download:** `0.3.3` with the full embedded runtime, built by GitHub
 > Actions. This build is **production-signed** with the DSHD release key.
 >
-> APK: **144 MB** · SHA-256:
+> APK: **146 MB** · SHA-256:
 > `031fc5a5c6931268f6582f7f3bab0a2de62c9e95cef27f87f5954c0ed0106292`
-> · [checksum file](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.3/dshd-android-release.apk.sha256)
+> · [checksum file](https://github.com/openviewmobile/dshd-android/releases/latest/download/dshd-android-release.apk.sha256)
 
 ## What you get
 
@@ -57,12 +57,24 @@ More evidence: [acceptance report](evidence/android-acceptance-0.3.2.md).
 
 Open this link **on the Android phone**:
 
-[**dshd-android-release.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.3/dshd-android-release.apk)
+[**dshd-android-release.apk**](https://github.com/openviewmobile/dshd-android/releases/latest/download/dshd-android-release.apk)
 
-Or open the [release page](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.3)
+Or open the [release page](https://github.com/openviewmobile/dshd-android/releases/latest)
 and download the `.apk` asset. The `.sha256` file is next to it.
 
-### 2. Allow installation
+### 2. Or install/update with Obtainium
+
+Add this repository as an app source in
+[Obtainium](https://github.com/ImranR98/Obtainium):
+
+```text
+https://github.com/openviewmobile/dshd-android
+```
+
+Use GitHub Releases and keep the default APK filter. Obtainium will notify you
+when a new production APK is published.
+
+### 3. Allow installation
 
 The APK is downloaded from GitHub, not Google Play. When Android asks, allow
 your browser or file manager to **install unknown apps**, then open the APK.
@@ -71,13 +83,13 @@ If you previously installed a DSHD build signed with a different key (including
 the old local test APK), Android may say **“App not installed”**. Uninstall the
 old DSHD first. Uninstalling removes local app data, so back up files you need.
 
-### 3. Open DSHD and wait for the first unpack
+### 4. Open DSHD and wait for the first unpack
 
 The first launch unpacks the embedded runtime. This usually takes **1–3 minutes**
 and can take longer on a slow phone. Keep DSHD in the foreground while the
 progress screen is visible. Later launches are much faster.
 
-### 4. Connect a model
+### 5. Connect a model
 
 On the **Connect a model** screen enter:
 

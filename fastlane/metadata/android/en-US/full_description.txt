@@ -1,0 +1,22 @@
+DSHD puts a complete DeepSeek Harness workspace on your Android phone.
+
+It embeds a Linux runtime, Node.js and the dsh host in one APK. There is no separate PC, no Termux setup and no companion computer. Open the app and use a real workspace with files, PDF preview, a terminal and agent sessions.
+
+BRING YOUR OWN MODEL
+Connect any OpenAI-compatible endpoint. Enter the base URL, API key and model id. The key is stored in Android Keystore-backed app storage.
+
+BUILT FOR THE PHONE
+A native Android shell handles the back button, file chooser, permissions, notifications and storage selection. The Linux host runs in the app's private storage.
+
+LOCAL WORKSPACE
+Workspace files, sessions and attachments stay in app-private storage or the storage location you choose. Prompts and context are sent only to the model endpoint you configure.
+
+OPEN SOURCE
+Apache-2.0. Source, tests, SBOM and reproducible GitHub Actions release builds are public.
+
+REQUIREMENTS
+- Android 9 or newer (API 28)
+- arm64-v8a phone
+- About 2 GB free space for the first unpack
+- An OpenAI-compatible endpoint, API key and model id
+- Sideloaded APK; not distributed through Google Play

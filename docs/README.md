@@ -18,6 +18,7 @@ This directory contains the detailed engineering notes. Pages marked
 | [release-notes-0.3.3.md](release-notes-0.3.3.md) | 0.3.3 Kotlin release notes and checksums |
 | [release-notes-0.3.2.md](release-notes-0.3.2.md) | 0.3.2 release notes and checksums |
 | [public-repo-security.md](public-repo-security.md) | Public-repository security/privacy audit |
+| [distribution.md](distribution.md) | Distribution channels, store metadata and submission status |
 | [github-repo-settings.md](github-repo-settings.md) | One-time GitHub admin settings checklist |
 | [github-release-checklist.md](github-release-checklist.md) (Chinese) | GitHub release asset checklist and blockers |
 | [provenance.md](provenance.md) | Build and release provenance for the 0.3.2 APK |

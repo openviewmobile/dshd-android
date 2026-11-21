@@ -2,7 +2,7 @@
 
 **DeepSeek Harness Desktop —— 在 Android 手机上运行真正的 AI 工作站。**
 
-[**下载当前 APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk) ·
+[**下载当前 APK**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.3/dshd-android-release.apk) ·
 [安装说明](#安装) · [界面截图](#截图) · [English](README.md)
 
 [![Android APK](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml/badge.svg)](https://github.com/openviewmobile/dshd-android/actions/workflows/android.yml)
@@ -14,12 +14,12 @@ DSHD 把完整的 Linux 运行时、Node.js、DeepSeek Harness Host 和 Web UI �
 APK。它直接运行在手机上：不需要电脑、不需要 root、不需要 Termux，也不需要另外
 安装 Linux。
 
-> **当前下载：** `0.3.2`，内置完整运行时，由 GitHub Actions 构建，使用
+> **当前下载：** `0.3.3`，内置完整运行时，由 GitHub Actions 构建，使用
 > **DSHD 发布密钥签名**。
 >
 > APK：**144 MB** · SHA-256：
-> `aa4e9783e7af547227f9c22970645cfe6daca41b54f11aed814a18b3c7ba3079`
-> · [校验文件](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk.sha256)
+> `031fc5a5c6931268f6582f7f3bab0a2de62c9e95cef27f87f5954c0ed0106292`
+> · [校验文件](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.3/dshd-android-release.apk.sha256)
 
 ## 你能得到什么
 
@@ -56,9 +56,9 @@ APK。它直接运行在手机上：不需要电脑、不需要 root、不需要
 
 请用 **Android 手机**打开：
 
-[**dshd-android-0.3.2-full-debug.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.2/dshd-android-release.apk)
+[**dshd-android-release.apk**](https://github.com/openviewmobile/dshd-android/releases/download/v0.3.3/dshd-android-release.apk)
 
-也可以打开 [Release 页面](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.2)
+也可以打开 [Release 页面](https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.3)
 下载 `.apk`；同目录下有 `.sha256` 校验文件。
 
 ### 第 2 步：允许安装

@@ -6,7 +6,7 @@ This release rebuilds the Android shell as a standard Kotlin project.
 
 | Asset | Size | SHA-256 |
 | --- | --- | --- |
-| `dshd-android-release.apk` (embedded runtime, release-signed) | 146 MB | pending CI |
+| `dshd-android-release.apk` (embedded runtime, release-signed) | 146 MB | `031fc5a5c6931268f6582f7f3bab0a2de62c9e95cef27f87f5954c0ed0106292` |
 
 The APK is built and signed by GitHub Actions from the sanitized rootfs; no local
 APK is uploaded.

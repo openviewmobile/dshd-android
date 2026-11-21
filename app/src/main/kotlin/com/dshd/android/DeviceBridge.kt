@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package com.dshd.android
 
 import android.Manifest
@@ -270,7 +272,7 @@ class DeviceBridge private constructor(context: Context) {
     val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
     if (manager == null) return error("location_unavailable", "Location service is unavailable.")
     val providers = manager.getProviders(true)
-    if (providers == null || providers.isEmpty()) {
+    if (providers.isEmpty()) {
       return error("location_disabled", "Location is disabled or has no enabled provider.")
     }
     var best: Location? = null

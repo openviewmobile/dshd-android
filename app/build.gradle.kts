@@ -53,8 +53,8 @@ android {
     applicationId = "com.dshd.android"
     minSdk = 28
     targetSdk = 28
-    versionCode = 5
-    versionName = "0.3.2"
+    versionCode = 6
+    versionName = "0.3.3"
     buildConfigField("String", "ROOTFS_URL", "\"${System.getenv("DSHD_ROOTFS_URL") ?: ""}\"")
     buildConfigField("String", "ROOTFS_SHA256", "\"${System.getenv("DSHD_ROOTFS_SHA256") ?: ""}\"")
     buildConfigField("boolean", "ROOTFS_EMBEDDED", embedRootfs.toString())

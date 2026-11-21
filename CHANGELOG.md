@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.3 — 2026-11-21
 
 - Migrate the native Android shell from Java to Kotlin (`MainActivity`,
   `BootOverlay`, `HostKeepAliveService`, `RootfsInstaller`, bridges, provider
@@ -8,6 +8,7 @@
   the signed Kotlin build passes the 4/4 device E2E.
 - Kotlin DSL + version catalog, `jvmToolchain(17)`, ktlint, detekt and
   `testDebugUnitTest`; CI runs all of them before building the APK.
+- VersionCode 6; standard root-level Gradle layout, Kotlin DSL and AGP 8.13.1.
 
 ## 0.3.2 — 2026-11-10
 

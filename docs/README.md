@@ -15,6 +15,7 @@ This directory contains the detailed engineering notes. Pages marked
 | [startup-performance.md](startup-performance.md) | Startup measurements, optimizations, remaining work |
 | [release.md](release.md) (Chinese) | Build, signing, rootfs hosting, release gates |
 | [full-release.md](full-release.md) | GitHub Actions full embedded-rootfs release |
+| [release-notes-0.3.3.md](release-notes-0.3.3.md) | 0.3.3 Kotlin release notes and checksums |
 | [release-notes-0.3.2.md](release-notes-0.3.2.md) | 0.3.2 release notes and checksums |
 | [public-repo-security.md](public-repo-security.md) | Public-repository security/privacy audit |
 | [github-repo-settings.md](github-repo-settings.md) | One-time GitHub admin settings checklist |

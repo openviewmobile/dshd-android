@@ -1,6 +1,8 @@
 name: Full APK release
 
 on:
+  push:
+    tags: ['v*']
   workflow_dispatch:
     inputs:
       rootfs_url:
@@ -25,8 +27,8 @@ jobs:
     env:
       ANDROID_HOME: /usr/local/lib/android/sdk
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-      ROOTFS_URL: ${{ inputs.rootfs_url || vars.ROOTFS_URL }}
-      ROOTFS_SHA256: ${{ inputs.rootfs_sha256 || vars.ROOTFS_SHA256 }}
+      ROOTFS_URL: ${{ inputs.rootfs_url || vars.ROOTFS_URL || 'https://github.com/openviewmobile/dshd-android/releases/download/rootfs-0.3.2/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf-sanitized.tar.xz' }}
+      ROOTFS_SHA256: ${{ inputs.rootfs_sha256 || vars.ROOTFS_SHA256 || '0c91ec900505963afe6cb7e2240bd0161a1d59bd46dc1a6e3a397c7395b18635' }}
       ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -105,9 +107,10 @@ jobs:
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           test -n "$RELEASE_TAG"
+          VERSION="${RELEASE_TAG#v}"
           gh release view "$RELEASE_TAG" >/dev/null 2>&1 || \
-            gh release create "$RELEASE_TAG" --title "DSHD for Android 0.3.2" \
-              --notes "Full embedded-rootfs APK built on GitHub Actions."
+            gh release create "$RELEASE_TAG" --title "DSHD for Android $VERSION" \
+              --notes "Full embedded-rootfs Kotlin APK built and signed on GitHub Actions."
           gh release upload "$RELEASE_TAG" \
             dist/dshd-android-release.apk \
             dist/dshd-android-release.apk.sha256 --clobber

@@ -49,13 +49,13 @@ jobs:
           STATUS=$?
           echo "status=$STATUS"
           tail -250 /tmp/build.log
-          cp /tmp/build.log release-build.log
+          cp /tmp/build.log release-build.txt
           exit 0
       - name: Upload/commit log
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git checkout -B diag
-          git add release-build.log
+          git add release-build.txt
           git commit -m 'ci: release build diagnostic' || true
           git push origin diag --force

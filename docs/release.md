@@ -79,7 +79,7 @@ HTTPS rootfs URL 和 64 位 SHA-256。
 
 ## rootfs 体积
 
-`fixed22-nativepdf` 在 fixed20-strip 基础上加入 Chromium 92 PDF 客户端补丁和原生 `PdfRenderer` 桥，功能与 0.3.2 一致：
+`fixed22-nativepdf` 在 fixed20-strip 基础上加入 Chromium 92 PDF 客户端补丁和原生 `PdfRenderer` 桥，功能与当前 0.3.3 一致：
 
 - 解包后约 **1.00 GiB**；
 - gzip 包 **276 MB**（fixed18）；xz 包 **150 MB**（fixed18-xz）；
@@ -106,4 +106,4 @@ HTTPS rootfs URL 和 64 位 SHA-256。
 | 去掉 `libreoffice-kit-wasm` | 120 MB | 文档/Office 预览与转换不可用 |
 | 再去掉语音、开发头文件/类型/测试/map | 98 MB | 语音输入、原生模块编译和部分开发诊断不可用 |
 
-结论：**143 MB fixed22-nativepdf 是 0.3.2 正式目标**；132 MB fixed20-clean 是历史低带宽包，不含原生 PDF 桥。
+结论：**143 MB fixed22-nativepdf 是当前 0.3.3 正式目标**；132 MB fixed20-clean 是历史低带宽包，不含原生 PDF 桥。

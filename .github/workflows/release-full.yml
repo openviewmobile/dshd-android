@@ -1,8 +1,6 @@
 name: Full APK release
 
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
     inputs:
       rootfs_url:

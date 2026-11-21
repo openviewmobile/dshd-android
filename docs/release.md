@@ -35,21 +35,20 @@ scripts/build-release-apk.sh
 
 输出：`dist/dshd-android-release.apk`。
 
-## 当前本地产物（不提交/不上传）
+## 当前发布产物
 
-以下路径与哈希仅用于本机验收；仓库和 GitHub Release 不包含这些 APK/rootfs 文件。
+生产 APK 由 GitHub Actions 构建和签名，发布在：
 
-| 产物 | SHA-256 |
-|---|---|
-| `dist/dshd-android-release.apk`（0.3.2，内置 fixed22-nativepdf，144 MB，v3 签名） | `73b7c945590a5dd37475256744046548d61ec403f8aba60c9fa2ea3697be0db5` |
-| `dist/dshd-android-release-lite.apk`（0.3.2，不内置 rootfs，856 KB） | `4e4c4e737d91d0dd27ad6714a2e0a61963ab7b512033f43420edc8573fb3377f` |
-| `dist/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed18.tar.gz`（276 MB，gzip 兼容包） | `c7c60899d8ba2ef24e3e47d61a1665a0bb46ab1c37f92893f4338e2bce0ca86f` |
-| `dist/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed18-xz.tar.xz`（150 MB） | `7764ddbce6478ba16ecd6cf839e80ea81758703eaefe738e4dadb672ebbb8644` |
-| `dist/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf.tar.xz`（143 MB，推荐） | `4fa3b4fd9bb4bf1877c5738633f3f46e6ba2c6910a1c3384fca08f4ed8caba46` |
-| `dist/dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed20-clean.tar.xz`（132 MB，已验证） | `8926522ab07ef4bc392f44d62400f1a24399a454f37cc597ea8ed03e1733def2` |
+<https://github.com/openviewmobile/dshd-android/releases/tag/v0.3.3>
 
-fixed17/fixed19/fixed15 是历史产物，仍保留在 `dist/` 供回溯；当前发布
-以 0.3.2 内置 APK 为准（rootfs 就在 APK 内）；fixed22-nativepdf 是当前包。fixed20-strip/clean 保留为历史回溯，不含原生 PDF 桥补丁。
+| 发布资产 | 大小 | SHA-256 |
+|---|---:|---|
+| `dshd-android-release.apk` | 152,755,693 字节 | `031fc5a5c6931268f6582f7f3bab0a2de62c9e95cef27f87f5954c0ed0106292` |
+| `dshd-rootfs-arm64-webview-pnpm-appboot-mobile-fixed22-nativepdf-sanitized.tar.xz` | 149,726,672 字节 | `0c91ec900505963afe6cb7e2240bd0161a1d59bd46dc1a6e3a397c7395b18635` |
+
+0.3.3 使用 fixed22-nativepdf runtime。上面的 rootfs 单独发布在
+<https://github.com/openviewmobile/dshd-android/releases/tag/rootfs-0.3.2>，
+供 `Full APK release` workflow 复现构建。
 
 ## 发布门禁
 

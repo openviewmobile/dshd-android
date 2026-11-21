@@ -1,0 +1,20 @@
+name: Close deferred Dependabot PR
+
+on:
+  push:
+    paths:
+      - .github/workflows/close-dependabot.yml
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close PR #9
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh pr close 9 --delete-branch

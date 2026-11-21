@@ -37,7 +37,7 @@ no separate Linux installer.
 
 | First launch | Chat workspace |
 | --- | --- |
-| <img src="evidence/acceptance-0.3.2/05-startup-overlay.png" width="280" alt="DSHD launch screen"> | <img src="evidence/acceptance-0.3.2/04-chat-normal.png" width="280" alt="DSHD chat workspace"> |
+| <img src="evidence/acceptance-0.3.3/05-startup-overlay-en.png" width="280" alt="DSHD launch screen in English"> | <img src="evidence/acceptance-0.3.3/04-chat-en.png" width="280" alt="DSHD chat workspace in English"> |
 
 More evidence: [acceptance report](evidence/android-acceptance-0.3.2.md).
 
